@@ -14,6 +14,8 @@ const prod = ENVIRONMENT === 'production';
 
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const MONGODB_URI = process.env.MONGODB_URI;
+export const SENDGRID_USER = process.env.SENDGRID_USER;
+export const SENDGRID_PASSWORD = process.env.SENDGRID_PASSWORD;
 
 if (!SESSION_SECRET) {
   logger.error('No client secret set. Set SESSION_SECRET in your .env');
