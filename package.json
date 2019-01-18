@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development nodemon",
+    "build": "npm run tslint && tsc",
+    "start": "NODE_ENV=production node dist/server.js",
+    "tslint": "tslint -c tslint.json -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -42,6 +45,8 @@
     "@types/winston": "^2.4.4",
     "nodemon": "^1.18.9",
     "ts-node": "^7.0.1",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.17.0",
     "typescript": "^3.2.4"
   }
 }

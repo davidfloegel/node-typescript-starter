@@ -1,12 +1,12 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import compression from 'compression';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import bluebird from 'bluebird';
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import dotenv from 'dotenv';
+import express from 'express';
+import mongoose from 'mongoose';
 
 import logger from './util/logger';
-import { SESSION_SECRET, MONGODB_URI } from './util/secrets';
+import { MONGODB_URI, SESSION_SECRET } from './util/secrets';
 
 // Load environment variables from .env file
 dotenv.config({ path: '.env' });
@@ -16,7 +16,7 @@ const app = express();
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
-(<any>mongoose).Promise = bluebird;
+mongoose.Promise = bluebird;
 mongoose
   .connect(
     mongoUrl,
