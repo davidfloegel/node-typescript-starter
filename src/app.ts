@@ -24,6 +24,7 @@ mongoose
   )
   .then(() => {
     logger.info('Successfully connected to MongoDB');
+    app.emit('ready');
   })
   .catch((err: any) => {
     logger.error(

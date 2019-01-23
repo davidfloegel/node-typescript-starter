@@ -25,6 +25,7 @@
   "dependencies": {
     "@types/bluebird": "^3.5.25",
     "@types/mongoose": "^5.3.8",
+    "bcrypt-nodejs": "^0.0.3",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
@@ -34,10 +35,12 @@
     "fs": "^0.0.1-security",
     "mongoose": "^5.4.4",
     "nodemailer": "^5.1.1",
+    "path": "^0.12.7",
     "tsconfig-paths": "^3.7.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {
+    "@types/bcrypt-nodejs": "^0.0.30",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "^0.0.36",
     "@types/dotenv": "^6.1.0",
@@ -49,6 +52,8 @@
     "@types/supertest": "^2.0.7",
     "@types/winston": "^2.4.4",
     "jest": "^23.6.0",
+    "jest-environment-node": "^23.4.0",
+    "mongodb-memory-server": "^3.0.0",
     "nodemon": "^1.18.9",
     "supertest": "^3.4.1",
     "ts-jest": "^23.10.5",
