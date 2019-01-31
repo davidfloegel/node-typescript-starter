@@ -1,6 +1,8 @@
 {
   "extends": ["tslint:latest", "tslint-config-prettier"],
   "rules": {
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "no-submodule-imports": [true, "test", "src", "context", "controllers"],
+    "no-implicit-dependencies": [true, ["mongodb", "mongodb-memory-server", "test", "src", "context", "controllers"]]
   }
 }

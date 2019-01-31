@@ -54,6 +54,7 @@
     "@types/winston": "^2.4.4",
     "jest": "^23.6.0",
     "jest-environment-node": "^23.4.0",
+    "mongodb": "^3.1.13",
     "mongodb-memory-server": "^3.0.0",
     "nodemon": "^1.18.9",
     "supertest": "^3.4.1",
