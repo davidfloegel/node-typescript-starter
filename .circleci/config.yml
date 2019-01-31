@@ -23,7 +23,9 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-        
+       
+      - run: cp .env.example .env
+
       # run tests!
       - run: yarn test
 
