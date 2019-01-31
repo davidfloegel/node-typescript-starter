@@ -21,8 +21,8 @@ describe('Authentication', () => {
         user: {
           firstName: 'Mark',
           lastName: 'Dyson',
-          email: 'mark@gmail.com'
-        }
+          email: 'mark@gmail.com',
+        },
       });
   });
 });
