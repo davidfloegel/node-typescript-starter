@@ -133,6 +133,13 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
   integrity sha512-A2TAGbTFdBw9azHbpVd+/FkdW2T6msN1uct1O9bH3vTerEHKZhTXJUQXy+hNq1B0RagfU8U+KBdqiZpxjhOUQA==
 
+"@types/mongodb-memory-server@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@types/mongodb-memory-server/-/mongodb-memory-server-1.8.0.tgz#43c8cf2142b18d0a2cda4b1bac9749d29939e4a4"
+  integrity sha512-8qBF4ww/i+SMfULYe9kCEtPRR3zp5U6UB8ApwogRPK+2wy8RPECxgcLCDDzRBJ0f9aStmE5O5IBO4s8shaIUjA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/mongodb@*":
   version "3.1.19"
   resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.19.tgz#40c4310986888975771857810aa47fd3ea8e1acf"

@@ -1,41 +1,55 @@
 // test.js
-import { MongoClient } from 'mongodb';
+import db from '../../../../test/db';
 
-let connection: any;
-let db: any;
+import User from '../schema';
 
 beforeAll(async () => {
-  connection = await MongoClient.connect(global.__MONGO_URI__);
-  db = await connection.db(global.__MONGO_DB_NAME__);
+  // tslint:disable-next-line
+  console.log('before all');
+
+  await db.setup();
+
+  // tslint:disable-next-line
+  console.log('before all done');
 });
 
 afterAll(async () => {
-  await connection.close();
-  await db.close();
+  await db.stop();
 });
 
 it('should aggregate docs from collection', async () => {
-  const files = db.collection('files');
+  const user = await new User({
+    email: 'test',
+    password: '123',
+    firstName: 'david',
+    lastName: 'floegel',
+  }).save();
 
-  await files.insertMany([
-    { type: 'Document' },
-    { type: 'Video' },
-    { type: 'Image' },
-    { type: 'Document' },
-    { type: 'Image' },
-    { type: 'Document' },
-  ]);
+  // tslint:disable-next-line
+  console.log('created user', user);
+  expect(user).toHaveProperty('firstName', 'david');
 
-  const topFiles = await files
-    .aggregate([
-      { $group: { _id: '$type', count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-    ])
-    .toArray();
+  // const files = db.collection('files');
 
-  expect(topFiles).toEqual([
-    { _id: 'Document', count: 3 },
-    { _id: 'Image', count: 2 },
-    { _id: 'Video', count: 1 },
-  ]);
+  // await files.insertMany([
+  //   { type: 'Document' },
+  //   { type: 'Video' },
+  //   { type: 'Image' },
+  //   { type: 'Document' },
+  //   { type: 'Image' },
+  //   { type: 'Document' },
+  // ]);
+
+  // const topFiles = await files
+  //   .aggregate([
+  //     { $group: { _id: '$type', count: { $sum: 1 } } },
+  //     { $sort: { count: -1 } },
+  //   ])
+  //   .toArray();
+
+  // expect(topFiles).toEqual([
+  //   { _id: 'Document', count: 3 },
+  //   { _id: 'Image', count: 2 },
+  //   { _id: 'Video', count: 1 },
+  // ]);
 });
