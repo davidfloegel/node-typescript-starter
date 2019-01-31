@@ -2,6 +2,9 @@ import { MongoClient } from 'mongodb';
 import MongoMemoryServer from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
+mongoose.set('useCreateIndex', true);
+
+// set the timeout because the memory server needs to download a db version
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
 
 class MongoEnvironment {
@@ -28,7 +31,7 @@ class MongoEnvironment {
     );
   }
 
-  public async stop() {
+  public async teardown() {
     await mongoose.disconnect();
     await this.mongod.stop();
   }

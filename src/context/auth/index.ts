@@ -1,3 +1,5 @@
+import UserModel, { User } from './schema';
+
 export interface IAuthObject {
   user: {
     email: string;
@@ -12,7 +14,20 @@ export interface ISignupFormData {
   lastName: string;
 }
 
-const signup = (formData: ISignupFormData): IAuthObject => {
+const signup = async (formData: ISignupFormData): Promise<User> => {
+  const newUser = new UserModel({
+    email: formData.email,
+    password: formData.password,
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+  });
+
+  const persisted = await newUser.save();
+
+  if (persisted) {
+    return persisted.toObject();
+  }
+
   return null;
 };
 

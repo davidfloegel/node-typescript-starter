@@ -8,7 +8,7 @@
     "build": "npm run tslint && tsc",
     "start": "NODE_ENV=production node dist/server.js",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "test": "jest --forceExit --coverage --verbose --detectOpenHandles",
+    "test": "NODE_ENV=testing jest --forceExit --coverage --verbose --detectOpenHandles",
     "watch-test": "npm run test -- --watchAll"
   },
   "repository": {

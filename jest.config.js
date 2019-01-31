@@ -1,4 +1,5 @@
 module.exports = {
+  roots: ['<rootDir>'],
   globals: {
     'ts-jest': {
       tsConfig: 'tsconfig.json',
@@ -10,7 +11,11 @@ module.exports = {
   },
   testMatch: ['**/__tests__/**/*.test.(ts|js)'],
   testEnvironment: 'node',
-  // globalSetup: './test/globalSetup.js',
-  // globalTeardown: './test/teardown.js',
-  // testEnvironment: './test/mongo.js',
+  moduleNameMapper: {
+    '^test(.*)$': '<rootDir>/test/$1',
+    '^src(.*)$': '<rootDir>/src/$1',
+    '^context(.*)$': '<rootDir>/src/context/$1',
+    '^controllers(.*)$': '<rootDir>/src/controllers/$1',
+    '^thirdparty(.*)$': '<rootDir>/src/thirdparty/$1',
+  },
 };

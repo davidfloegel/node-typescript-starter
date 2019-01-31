@@ -10,7 +10,7 @@ export type User = mongoose.Document & {
   lastName: string;
 
   flags: {
-    accountConfirmedAt: Date;
+    accountConfirmedAt: Date | null;
   };
 
   gravatar: (size: number) => string;
@@ -25,14 +25,14 @@ type comparePasswordFunction = (
 
 const userSchema = new mongoose.Schema(
   {
-    email: { type: String, unique: true },
-    password: String,
+    email: { required: true, type: String, unique: true, lowercase: true },
+    password: { required: true, type: String, select: false },
 
-    firstName: String,
-    lastName: String,
+    firstName: { required: true, type: String },
+    lastName: { required: true, type: String },
 
     flags: {
-      accountConfirmedAt: Date,
+      accountConfirmedAt: { type: Date, default: null },
     },
   },
   { timestamps: true }

@@ -11,12 +11,16 @@
     "baseUrl": "./",
     "lib": ["es2015"],
     "paths": {
-      "*": [
-        "node_modules/*"
-      ]
+      "test/*": ["test/*"],
+      "src/*": ["src/*"],
+      "context/*": ["src/context/*"],
+      "controllers/*": ["src/controllers/*"],
+      "thirdparty/*": ["src/thirdparty/*"],
+      "util/*": ["src/util/*"]
     }
   },
   "include": [
+    "test/**/*",
     "src/**/*"
   ]
 }

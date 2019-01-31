@@ -1,55 +1,43 @@
-// test.js
-import db from '../../../../test/db';
+import Auth from 'context/auth';
+import db from 'test/db';
 
-import User from '../schema';
+beforeAll(async () => db.setup());
 
-beforeAll(async () => {
-  // tslint:disable-next-line
-  console.log('before all');
+afterAll(async () => db.teardown());
 
-  await db.setup();
+describe('Authentication: Signup', () => {
+  // it('it throws an error if the form data is invalid', async () => {});
 
-  // tslint:disable-next-line
-  console.log('before all done');
-});
+  // it('it throws an error if the email address is already registered', async () => {});
 
-afterAll(async () => {
-  await db.stop();
-});
+  it('it creates a new and unconfirmed user', async () => {
+    const newUser = await Auth.signup({
+      email: 'newuser@gmail.com',
+      password: 'hello123',
+      firstName: 'John',
+      lastName: 'Doe',
+    });
 
-it('should aggregate docs from collection', async () => {
-  const user = await new User({
-    email: 'test',
-    password: '123',
-    firstName: 'david',
-    lastName: 'floegel',
-  }).save();
+    expect(newUser).toBeDefined();
 
-  // tslint:disable-next-line
-  console.log('created user', user);
-  expect(user).toHaveProperty('firstName', 'david');
+    expect(newUser).toHaveProperty('_id');
+    expect(newUser).toHaveProperty('createdAt');
 
-  // const files = db.collection('files');
+    expect(newUser).toHaveProperty('email', newUser.email);
+    expect(newUser).toHaveProperty('password');
+    expect(newUser).toHaveProperty('firstName', newUser.firstName);
+    expect(newUser).toHaveProperty('lastName', newUser.lastName);
+    expect(newUser).toHaveProperty('flags.accountConfirmedAt', null);
+  });
 
-  // await files.insertMany([
-  //   { type: 'Document' },
-  //   { type: 'Video' },
-  //   { type: 'Image' },
-  //   { type: 'Document' },
-  //   { type: 'Image' },
-  //   { type: 'Document' },
-  // ]);
+  it('it converts the email address to lowercase', async () => {
+    const newUser = await Auth.signup({
+      email: 'IAmMixedCase@gmail.com',
+      password: 'hello123',
+      firstName: 'John',
+      lastName: 'Doe',
+    });
 
-  // const topFiles = await files
-  //   .aggregate([
-  //     { $group: { _id: '$type', count: { $sum: 1 } } },
-  //     { $sort: { count: -1 } },
-  //   ])
-  //   .toArray();
-
-  // expect(topFiles).toEqual([
-  //   { _id: 'Document', count: 3 },
-  //   { _id: 'Image', count: 2 },
-  //   { _id: 'Video', count: 1 },
-  // ]);
+    expect(newUser).toHaveProperty('email', 'iammixedcase@gmail.com');
+  });
 });
