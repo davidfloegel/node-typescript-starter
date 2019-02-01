@@ -15,6 +15,8 @@ export interface ISignupFormData {
 }
 
 const signup = async (formData: ISignupFormData): Promise<User> => {
+  // @TODO form validation
+
   const newUser = new UserModel({
     email: formData.email,
     password: formData.password,
@@ -22,6 +24,7 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
     lastName: formData.lastName,
   });
 
+  // @TODO try catch to handle insert errors?
   const persisted = await newUser.save();
 
   if (persisted) {
