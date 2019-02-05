@@ -1,4 +1,7 @@
+import errorHandler from 'src/middlewares/errorHandler';
 import app from './app';
+
+app.use(errorHandler);
 
 const server = () => {
   app.on('ready', () => {

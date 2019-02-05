@@ -16,10 +16,10 @@ class MongoEnvironment {
     this.mongod = new MongoMemoryServer({ autoStart: false });
   }
 
-  public async setup() {
+  public async setup(insertBefore: any = []) {
     this.mongod.start();
     const mongoUri = await this.mongod.getConnectionString();
-    return mongoose.connect(
+    await mongoose.connect(
       mongoUri,
       { useNewUrlParser: true },
       err => {
@@ -29,6 +29,12 @@ class MongoEnvironment {
         }
       }
     );
+
+    if (insertBefore.length > 0) {
+      await Promise.all(insertBefore.map((x: any) => x.save()));
+    }
+
+    return true;
   }
 
   public async teardown() {

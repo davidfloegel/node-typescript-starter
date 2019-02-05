@@ -1,3 +1,10 @@
+import Validator from 'muso-validatejs';
+import {
+  DUPLICATE_ERROR_CODE,
+  EmailExistsError,
+  InternalError,
+  ValidationError,
+} from 'src/lib/errors';
 import UserModel, { User } from './schema';
 
 export interface IAuthObject {
@@ -15,7 +22,17 @@ export interface ISignupFormData {
 }
 
 const signup = async (formData: ISignupFormData): Promise<User> => {
-  // @TODO form validation
+  const validation = Validator.check(formData, {
+    email: { required: true, email: true },
+    password: { required: true, type: 'string', min: 4 },
+    firstName: { required: true, type: 'alphanum', min: 2 },
+    lastName: { required: true, type: 'alphanum', min: 2 },
+  });
+
+  if (validation.failed()) {
+    const errors = validation.errors().asSentence();
+    throw new ValidationError(errors);
+  }
 
   const newUser = new UserModel({
     email: formData.email,
@@ -24,14 +41,16 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
     lastName: formData.lastName,
   });
 
-  // @TODO try catch to handle insert errors?
-  const persisted = await newUser.save();
-
-  if (persisted) {
+  try {
+    const persisted = await newUser.save();
     return persisted.toObject();
-  }
+  } catch (e) {
+    if (e.code === DUPLICATE_ERROR_CODE) {
+      throw new EmailExistsError();
+    }
 
-  return null;
+    throw new InternalError();
+  }
 };
 
 const confirmAccount = (email: string): boolean => {

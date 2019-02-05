@@ -6,6 +6,23 @@ export default function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  res.status(500).send({ error: err.message || 'Internal Server Error' });
+  if (err.statusCode) {
+    res.status(err.statusCode).send({
+      code: err.code,
+      statusCode: err.statusCode,
+      message: err.message,
+      errors: err.errors || {},
+    });
+
+    return next(err);
+  }
+
+  res.status(500).send({
+    code: 'unknown',
+    statusCode: 5400,
+    message: err.message || 'Internal Server Error',
+    errors: {},
+  });
+
   return next(err);
 }

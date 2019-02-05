@@ -1,14 +1,34 @@
 import Auth from 'context/auth';
+import fakeUser from 'context/auth/__tests__/fake';
+import { EmailExistsError, ValidationError } from 'src/lib/errors';
 import db from 'test/db';
 
-beforeAll(async () => db.setup());
+beforeAll(async () => db.setup([fakeUser({ email: 'existing@gmail.com' })]));
 
 afterAll(async () => db.teardown());
 
 describe('Authentication: Signup', () => {
-  // it('it throws an error if the form data is invalid', async () => {});
+  it('it throws an error if the form data is invalid', async () => {
+    await expect(
+      Auth.signup({
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+      })
+    ).rejects.toThrowError(ValidationError);
+  });
 
-  // it('it throws an error if the email address is already registered', async () => {});
+  it('it throws an error if the email address is already registered', async () => {
+    await expect(
+      Auth.signup({
+        email: 'existing@gmail.com',
+        password: 'iexist',
+        firstName: 'Ialready',
+        lastName: 'Exist',
+      })
+    ).rejects.toThrowError(EmailExistsError);
+  });
 
   it('it creates a new and unconfirmed user', async () => {
     const newUser = await Auth.signup({
