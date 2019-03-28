@@ -13,16 +13,20 @@ class MongoEnvironment {
   private db: any;
 
   constructor() {
-    this.mongod = new MongoMemoryServer({ debug: true, autoStart: false });
+    this.mongod = new MongoMemoryServer({
+      debug: true,
+      autoStart: false,
+    });
   }
 
   public async setup(insertBefore: any = []) {
     this.mongod.start();
     const mongoUri = await this.mongod.getConnectionString();
+
     await mongoose.connect(
       mongoUri,
       { useNewUrlParser: true },
-      err => {
+      (err: any) => {
         if (err) {
           // tslint:disable-next-line
           console.error(err);
