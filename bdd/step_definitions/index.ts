@@ -7,11 +7,19 @@ import { MONGODB_URI } from '../../src/util/secrets';
 import UserSchema, { User } from '../../src/context/auth/schema';
 
 Before(async () => {
+  async function clearCollections() {
+    for (var collection in mongoose.connection.collections) {
+      await mongoose.connection.collections[collection].deleteMany({});
+    }
+
+    return true;
+  }
+
   await mongoose.connect(
     MONGODB_URI,
     { useCreateIndex: true, useNewUrlParser: true }
   );
-  await mongoose.connection.db.dropDatabase();
+  await clearCollections();
   return true;
 });
 
@@ -45,7 +53,11 @@ When('I make a GET request to {string}', async url => {
 
 When('I make a POST request to {string}', async (url, table) => {
   try {
-    this.res = await got.post(`http://localhost:4000${url}`, table.hashes());
+    const body = table.hashes()[0];
+    this.res = await got.post(`http://localhost:4000${url}`, {
+      json: true,
+      body,
+    });
     return true;
   } catch (e) {
     this.res = e;

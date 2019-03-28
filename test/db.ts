@@ -14,11 +14,20 @@ class MongoEnvironment {
   private db: any;
 
   public async setup(insertBefore: any = []) {
+    async function clearCollections() {
+      for (var collection in mongoose.connection.collections) {
+        await mongoose.connection.collections[collection].deleteMany({});
+      }
+
+      return true;
+    }
+
     await mongoose.connect(
       MONGODB_URI,
       { useCreateIndex: true, useNewUrlParser: true }
     );
-    // await mongoose.connection.db.dropDatabase();
+
+    await clearCollections();
 
     if (insertBefore.length > 0) {
       await Promise.all(insertBefore.map((x: any) => x.save()));
