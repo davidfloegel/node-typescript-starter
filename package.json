@@ -10,7 +10,7 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "test": "NODE_ENV=testing jest --forceExit --coverage --verbose --detectOpenHandles",
     "watch-test": "npm run test -- --watchAll",
-    "bdd": "./node_modules/.bin/cucumber-js bdd/features/**/*.feature --require-module ts-node/register --require-module @babel/register --require 'bdd/step_definitions/**/*.ts'"
+    "bdd": "./node_modules/.bin/cucumber-js bdd/features/**/*.feature -f node_modules/cucumber-pretty --require-module ts-node/register --require-module @babel/register --require 'bdd/step_definitions/**/*.ts'"
   },
   "repository": {
     "type": "git",
@@ -47,11 +47,13 @@
     "@babel/register": "^7.4.0",
     "@types/bcrypt-nodejs": "^0.0.30",
     "@types/body-parser": "^1.17.0",
+    "@types/chai": "^4.1.7",
     "@types/compression": "^0.0.36",
     "@types/cucumber": "^4.0.5",
     "@types/dotenv": "^6.1.0",
     "@types/errorhandler": "^0.0.32",
     "@types/faker": "^4.1.5",
+    "@types/got": "^9.4.1",
     "@types/jest": "^23.3.12",
     "@types/mongodb-memory-server": "^1.8.0",
     "@types/node": "^10.12.18",
@@ -59,7 +61,10 @@
     "@types/request": "^2.48.1",
     "@types/supertest": "^2.0.7",
     "@types/winston": "^2.4.4",
+    "chai": "^4.2.0",
     "cucumber": "^5.1.0",
+    "cucumber-pretty": "^1.5.0",
+    "got": "^9.6.0",
     "jest": "^23.6.0",
     "jest-environment-node": "^23.4.0",
     "mongodb": "^3.1.13",

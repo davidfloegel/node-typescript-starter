@@ -46,8 +46,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routing
-app.get('/', (req, res) => res.status(200).send('Hello'));
-app.get('/ping', (req, res) => res.status(200).send('Pong'));
+app.get('/ping', (req, res) => res.status(200).send({ data: 'pong' }));
 app.post('/signup', AuthController.signup);
 
 export default app;

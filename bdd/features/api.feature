@@ -4,7 +4,6 @@ Feature: Check the API is running
   I want to make sure certain endpoints are available
 
   Scenario: The ping endpoints returns pong as response
-    Given the api is running
     When I make a GET request to "/ping"
     Then the response status code should be 200
     And the body of the response should be "pong"
