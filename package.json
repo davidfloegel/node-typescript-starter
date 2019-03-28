@@ -10,7 +10,7 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "test": "NODE_ENV=testing jest --forceExit --coverage --verbose --detectOpenHandles",
     "watch-test": "npm run test -- --watchAll",
-    "bdd": "./node_modules/.bin/cucumber-js bdd/features/**/*.feature -f node_modules/cucumber-pretty --require-module ts-node/register --require-module @babel/register --require 'bdd/step_definitions/**/*.ts'"
+    "bdd": "./node_modules/.bin/cucumber-js bdd/features -f node_modules/cucumber-pretty --require-module ts-node/register --require-module @babel/register --require 'bdd/step_definitions/**/*.ts'"
   },
   "repository": {
     "type": "git",
