@@ -13,7 +13,7 @@ class MongoEnvironment {
   private db: any;
 
   constructor() {
-    this.mongod = new MongoMemoryServer({ autoStart: false });
+    this.mongod = new MongoMemoryServer({ debug: true, autoStart: false });
   }
 
   public async setup(insertBefore: any = []) {
