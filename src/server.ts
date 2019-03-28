@@ -8,7 +8,7 @@ const server = () => {
     app.listen(app.get('port'), () => {
       // tslint:disable-next-line
       console.log(
-        'App is running at http://localhost:%d in %s mode',
+        '🚀 Api is running at http://localhost:%d in %s mode',
         app.get('port'),
         app.get('env')
       );
