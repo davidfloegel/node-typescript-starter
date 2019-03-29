@@ -1,10 +1,8 @@
 import { expect } from 'chai';
 import { Before, After, AfterAll, Given, Then, When } from 'cucumber';
 import got from 'got';
-import mongoose from 'mongoose';
 
 import MongoEnvironment from '../../test/db';
-import { MONGODB_URI } from '../../src/util/secrets';
 import UserSchema, { User } from '../../src/context/auth/schema';
 
 Before(async () => {
