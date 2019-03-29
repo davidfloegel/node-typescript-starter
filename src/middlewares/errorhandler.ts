@@ -19,7 +19,7 @@ export default function errorHandler(
 
   res.status(500).send({
     code: 'unknown',
-    statusCode: 5400,
+    statusCode: 500,
     message: err.message || 'Internal Server Error',
     errors: {},
   });
