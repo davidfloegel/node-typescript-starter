@@ -1,6 +1,6 @@
 Feature: Create Account
+  I want to be able to sign up to the system
   As a user
-  I want to be able to sign up to the api
   So I can make authenticated requests
 
   Scenario: I should see an error if the form data is invalid

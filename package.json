@@ -45,6 +45,9 @@
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/register": "^7.4.0",
+    "@stryker-mutator/core": "^1.1.1",
+    "@stryker-mutator/jest-runner": "^1.1.1",
+    "@stryker-mutator/typescript": "^1.1.1",
     "@types/bcrypt-nodejs": "^0.0.30",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.7",

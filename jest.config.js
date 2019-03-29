@@ -9,7 +9,7 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
-  testMatch: ['**/__tests__/**/*.test.(ts|js)'],
+  testMatch: ['<rootDir>/src/**/*.test.(ts|js)'],
   testEnvironment: 'node',
   moduleNameMapper: {
     '^test(.*)$': '<rootDir>/test/$1',

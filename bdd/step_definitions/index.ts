@@ -3,29 +3,18 @@ import { Before, After, AfterAll, Given, Then, When } from 'cucumber';
 import got from 'got';
 import mongoose from 'mongoose';
 
+import MongoEnvironment from '../../test/db';
 import { MONGODB_URI } from '../../src/util/secrets';
 import UserSchema, { User } from '../../src/context/auth/schema';
 
 Before(async () => {
-  async function clearCollections() {
-    for (var collection in mongoose.connection.collections) {
-      await mongoose.connection.collections[collection].deleteMany({});
-    }
-
-    return true;
-  }
-
-  await mongoose.connect(
-    MONGODB_URI,
-    { useCreateIndex: true, useNewUrlParser: true }
-  );
-  await clearCollections();
+  await MongoEnvironment.connect();
   return true;
 });
 
 After(async () => {
-  await mongoose.connection.close();
-  return;
+  await MongoEnvironment.teardown();
+  return true;
 });
 
 Given(/^there (?:is|are) the following (?:user|users)$/, async table => {
