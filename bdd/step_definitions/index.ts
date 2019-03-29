@@ -56,6 +56,14 @@ Then('the response status code should be {int}', statusCode => {
   expect(this.res.statusCode).to.eql(statusCode);
 });
 
+Then(/^the response (error|message) should be "(.*)"$/, (type, msg) => {
+  expect(this.res.body[type]).to.eql(msg);
+});
+
+Then(/^the response should contain a "(.*)" property/, field => {
+  expect(this.res.body.data).to.have.property(field);
+});
+
 Then('the body of the response should be {string}', res => {
   const body = JSON.parse(this.res.body);
   expect(body.data).to.eql(res);

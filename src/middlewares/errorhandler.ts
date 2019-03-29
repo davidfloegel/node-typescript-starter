@@ -10,7 +10,7 @@ export default function errorHandler(
     res.status(err.statusCode).send({
       code: err.code,
       statusCode: err.statusCode,
-      message: err.message,
+      error: err.message,
       errors: err.errors || {},
     });
 
@@ -20,7 +20,7 @@ export default function errorHandler(
   res.status(500).send({
     code: 'unknown',
     statusCode: 500,
-    message: err.message || 'Internal Server Error',
+    error: err.message || 'Internal Server Error',
     errors: {},
   });
 

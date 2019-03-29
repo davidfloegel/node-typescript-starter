@@ -8,6 +8,7 @@ Feature: Create Account
       | firstName | lastName | email          | password |
       | E         | S        | invalidmail    | pw       |
     Then the response status code should be 400
+    And the response error should be "Form validation failed"
 
   Scenario: I should see an error if my email address is already registered
     Given there is the following user
@@ -17,9 +18,12 @@ Feature: Create Account
       | firstName | lastName | email          | password |
       | John      | Stark    | john@gmail.com | newpw    |
     Then the response status code should be 400
+    And the response error should be "Email address is already registered"
 
   Scenario: I should see a success response if my account has been created
     When I make a POST request to "/signup"
       | firstName | lastName | email          | password |
       | Aria      | Stark    | aria@gmail.com | iamaria  |
     Then the response status code should be 200
+    And the response message should be "Your account has been created"
+    And the response should contain a "user" property

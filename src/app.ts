@@ -5,9 +5,8 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
-import logger from './util/logger';
-import { ENV, PORT, MONGODB_URI, SESSION_SECRET } from './util/secrets';
-
+import logger from 'utils/logger';
+import secrets from 'utils/secrets';
 import * as AuthController from 'controllers/AuthController';
 
 // Load environment variables from .env file
@@ -17,8 +16,8 @@ dotenv.config({ path: '.env' });
 const app = express();
 
 // Connect to MongoDB
-if (ENV !== 'testing') {
-  const mongoUrl = MONGODB_URI;
+if (secrets.env !== 'testing') {
+  const mongoUrl = secrets.mongodbURI;
   mongoose.Promise = bluebird;
   mongoose
     .connect(
@@ -41,7 +40,7 @@ if (ENV !== 'testing') {
 }
 
 // Configure express
-app.set('port', PORT || 4000);
+app.set('port', secrets.port || 4000);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

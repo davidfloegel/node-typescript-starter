@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import bluebird from 'bluebird';
 
-import { MONGODB_URI } from '../src/util/secrets';
+import secrets from '../src/utils/secrets';
 
 mongoose.Promise = bluebird;
 
@@ -20,7 +20,7 @@ class MongoEnvironment {
 
   public async connect() {
     await mongoose.connect(
-      MONGODB_URI,
+      secrets.mongodbURI,
       { useCreateIndex: true, useNewUrlParser: true }
     );
 

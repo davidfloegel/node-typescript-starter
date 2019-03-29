@@ -16,13 +16,13 @@
       "context/*": ["src/context/*"],
       "controllers/*": ["src/controllers/*"],
       "thirdparty/*": ["src/thirdparty/*"],
-      "util/*": ["src/util/*"]
+      "utils/*": ["src/utils/*"]
     },
     "typeRoots": [ "./src/typings", "./node_modules/@types"]
   },
   "include": [
     "test/**/*",
     "src/**/*"
-  ],  
+  ],
   "exclude": ["node_modules", "typings"]
 }

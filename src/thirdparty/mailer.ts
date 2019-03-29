@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { SENDGRID_PASSWORD, SENDGRID_USER } from '../util/secrets';
+import { SENDGRID_PASSWORD, SENDGRID_USER } from '../utils/secrets';
 
 const transporter = nodemailer.createTransport({
   service: 'SendGrid',
