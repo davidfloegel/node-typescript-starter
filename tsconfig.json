@@ -15,6 +15,7 @@
       "src/*": ["src/*"],
       "context/*": ["src/context/*"],
       "controllers/*": ["src/controllers/*"],
+      "middlewares/*": ["src/middlewares/*"],
       "thirdparty/*": ["src/thirdparty/*"],
       "utils/*": ["src/utils/*"]
     },

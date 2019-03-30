@@ -17,6 +17,7 @@ module.exports = {
     '^context(.*)$': '<rootDir>/src/context/$1',
     '^controllers(.*)$': '<rootDir>/src/controllers/$1',
     '^thirdparty(.*)$': '<rootDir>/src/thirdparty/$1',
+    '^middlewares(.*)$': '<rootDir>/src/middlewares/$1',
     '^utils(.*)$': '<rootDir>/src/utils/$1',
   },
 };

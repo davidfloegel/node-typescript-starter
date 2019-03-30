@@ -1,12 +1,13 @@
-import { NextFunction, Response } from 'express';
+import { Request, NextFunction, Response } from 'express';
+import { ApiError } from 'src/lib/errors';
 
 export default function errorHandler(
-  err: any,
-  _: any,
+  err: ApiError | Error,
+  _: Request,
   res: Response,
   next: NextFunction
 ) {
-  if (err.statusCode) {
+  if (err instanceof ApiError) {
     res.status(err.statusCode).send({
       code: err.code,
       statusCode: err.statusCode,

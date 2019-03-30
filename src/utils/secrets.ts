@@ -10,22 +10,13 @@ if (!fs.existsSync('.env')) {
 dotenv.config({ path: '.env' });
 
 const ENV = process.env.NODE_ENV;
-const DEV = ENV === 'development';
-const PROD = ENV === 'production';
 
-const PORT = process.env.PORT || 4000;
-
-const SESSION_SECRET = process.env.SESSION_SECRET;
-const MONGODB_URI = process.env.MONGODB_URI;
-const SENDGRID_USER = process.env.SENDGRID_USER;
-const SENDGRID_PASSWORD = process.env.SENDGRID_PASSWORD;
-
-if (!SESSION_SECRET) {
+if (!process.env.SESSION_SECRET) {
   logger.error('❗️No client secret set. Set SESSION_SECRET in your .env');
   process.exit(1);
 }
 
-if (!MONGODB_URI) {
+if (!process.env.MONGODB_URI) {
   logger.error(
     '❗️No mongodb connection url set. Set MONGODB_URI in your .env'
   );
@@ -50,17 +41,17 @@ type Config = {
 
 const config: Config = {
   env: ENV,
-  dev: DEV,
-  prod: PROD,
+  dev: ENV === 'development',
+  prod: ENV === 'production',
 
-  port: String(PORT),
+  port: String(process.env.PORT || 4000),
 
-  sessionSecret: SESSION_SECRET,
-  mongodbURI: MONGODB_URI,
+  sessionSecret: process.env.SESSION_SECRET,
+  mongodbURI: process.env.MONGODB_URI,
 
   sendgrid: {
-    user: SENDGRID_USER,
-    password: SENDGRID_PASSWORD,
+    user: process.env.SENDGRID_USER,
+    password: process.env.SENDGRID_PASSWORD,
   },
 };
 

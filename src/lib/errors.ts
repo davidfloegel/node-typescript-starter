@@ -2,7 +2,13 @@
 
 export const DUPLICATE_ERROR_CODE = 11000;
 
-export class UnauthorizedError extends Error {
+export class ApiError extends Error {
+  public code: string;
+  public statusCode: number;
+  public errors?: any;
+}
+
+export class UnauthorizedError extends ApiError {
   public code: string = 'unauthorized';
   public statusCode: number = 401;
 
@@ -13,7 +19,7 @@ export class UnauthorizedError extends Error {
   }
 }
 
-export class InternalError extends Error {
+export class InternalError extends ApiError {
   public code: string = 'internal-server-error';
   public statusCode: number = 500;
 
@@ -24,7 +30,7 @@ export class InternalError extends Error {
   }
 }
 
-export class ValidationError extends Error {
+export class ValidationError extends ApiError {
   public code: string = 'validation-error';
   public statusCode: number = 400;
   public errors?: any;
@@ -37,8 +43,8 @@ export class ValidationError extends Error {
   }
 }
 
-export class EmailExistsError extends Error {
-  public code: string = 'email-exists-error';
+export class EmailExistsError extends ApiError {
+  public code: string = 'email-exists';
   public statusCode: number = 400;
   public errors?: any;
 
