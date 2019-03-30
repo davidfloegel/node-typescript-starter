@@ -1,27 +1,9 @@
 import bcrypt from 'bcrypt-nodejs';
 import crypto from 'crypto';
+import { NextFunction } from 'express';
 import mongoose from 'mongoose';
 
-export type User = mongoose.Document & {
-  email: string;
-  password: string;
-
-  firstName: string;
-  lastName: string;
-
-  flags: {
-    accountConfirmedAt: Date | null;
-  };
-
-  gravatar: (size: number) => string;
-
-  comparePassword: comparePasswordFunction;
-};
-
-type comparePasswordFunction = (
-  candidatePassword: string,
-  cb: (err: any, isMatch: any) => {}
-) => void;
+import { comparePasswordFunction, User } from './interfaces';
 
 const userSchema = new mongoose.Schema(
   {
@@ -38,20 +20,26 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const comparePassword: comparePasswordFunction = function(
-  candidatePassword,
-  cb
-) {
-  bcrypt.compare(
-    candidatePassword,
-    this.password,
-    (err: mongoose.Error, isMatch: boolean) => {
-      cb(err, isMatch);
-    }
-  );
+userSchema.pre<User>('save', function(next: NextFunction) {
+  this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
+  next();
+});
+
+const comparePassword: comparePasswordFunction = async function(
+  candidatePassword: string
+): Promise<boolean> {
+  try {
+    return bcrypt.compareSync(candidatePassword, this.password);
+  } catch (err) {
+    throw Error(err);
+  }
 };
 
 userSchema.methods.comparePassword = comparePassword;
+
+userSchema.virtual('fullName').get(function() {
+  return this.firstName + ' ' + this.lastName;
+});
 
 /**
  * Helper method for getting user's gravatar.
@@ -70,5 +58,4 @@ userSchema.methods.gravatar = function(size: number) {
   return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
 };
 
-const User = mongoose.model('User', userSchema);
-export default User;
+export default mongoose.model<User>('User', userSchema);
