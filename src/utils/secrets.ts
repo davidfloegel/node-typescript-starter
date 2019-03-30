@@ -23,7 +23,7 @@ if (!process.env.MONGODB_URI) {
   process.exit(1);
 }
 
-type Config = {
+interface IConfig {
   env: string;
   dev: boolean;
   prod: boolean;
@@ -37,9 +37,9 @@ type Config = {
     user: string;
     password: string;
   };
-};
+}
 
-const config: Config = {
+const config: IConfig = {
   env: ENV,
   dev: ENV === 'development',
   prod: ENV === 'production',

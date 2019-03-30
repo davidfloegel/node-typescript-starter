@@ -1,4 +1,4 @@
-import { Request, NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ApiError } from 'src/lib/errors';
 
 export default function errorHandler(

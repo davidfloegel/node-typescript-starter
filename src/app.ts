@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
+import * as AuthController from 'controllers/AuthController';
 import logger from 'utils/logger';
 import secrets from 'utils/secrets';
-import * as AuthController from 'controllers/AuthController';
 
 // Load environment variables from .env file
 dotenv.config({ path: '.env' });

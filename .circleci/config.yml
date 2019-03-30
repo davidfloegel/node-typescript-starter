@@ -27,5 +27,6 @@ jobs:
       - run: cp .env.example .env
 
       # run tests!
+      - run: yarn tslint
       - run: yarn test
 

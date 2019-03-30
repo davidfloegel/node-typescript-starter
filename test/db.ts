@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import bluebird from 'bluebird';
+import mongoose from 'mongoose';
 
 import secrets from '../src/utils/secrets';
 
@@ -9,14 +9,6 @@ class MongoEnvironment {
   private mongod: any;
   private connection: any;
   private db: any;
-
-  private async _clearCollections() {
-    for (var collection in mongoose.connection.collections) {
-      await mongoose.connection.collections[collection].deleteMany({});
-    }
-
-    return true;
-  }
 
   public async connect() {
     await mongoose.connect(
@@ -39,6 +31,16 @@ class MongoEnvironment {
 
   public async teardown() {
     await mongoose.connection.close();
+  }
+
+  private async _clearCollections() {
+    for (const collection in mongoose.connection.collections) {
+      if (collection) {
+        await mongoose.connection.collections[collection].deleteMany({});
+      }
+    }
+
+    return true;
   }
 }
 
