@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
-import logger from './logger';
+import logger from 'utils/logger';
 
 if (!fs.existsSync('.env')) {
   logger.error('No .env file exists in the root directory of your project');
