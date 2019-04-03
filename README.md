@@ -25,4 +25,36 @@ I'm building this starter kit which includes things like
 
 - [ ] Run linting, tests & bdd on CI
 
+## Getting started
 
+To get started, clone or fork the repository.
+
+Copy the `.env.example` file to `.env` and set a session secret. If you do not want to use docker
+you can set a new mongodb url.
+
+To start the project simply run
+```
+docker-compose up
+```
+
+Available commands
+```
+// Run linting
+docker-compose exec tsapi yarn tslint
+
+// Run tests
+docker-compose exec tsapi yarn test
+
+// Run tests in watch mode
+docker-compose exec tsapi yarn watch-test
+
+// Run BDD
+docker-compose exec tsapi yarn bdd
+```
+
+## Building
+
+To build the api and ready it for deployment, run:
+```
+docker-compose exec tsapi yarn build
+```

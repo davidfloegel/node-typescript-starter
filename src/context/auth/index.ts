@@ -5,8 +5,8 @@ import {
   InternalError,
   ValidationError,
 } from 'src/lib/errors';
-import UserModel from './schema';
 import { User } from './interfaces';
+import UserModel from './schema';
 
 export interface IAuthObject {
   user: {
