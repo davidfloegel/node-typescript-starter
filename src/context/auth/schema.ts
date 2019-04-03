@@ -20,11 +20,13 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Before saving the user, hash the password
 userSchema.pre<User>('save', function(next: NextFunction) {
   this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
   next();
 });
 
+// compare the users password to a candidate
 const comparePassword: comparePasswordFunction = async function(
   candidatePassword: string
 ): Promise<boolean> {
@@ -37,13 +39,12 @@ const comparePassword: comparePasswordFunction = async function(
 
 userSchema.methods.comparePassword = comparePassword;
 
+// virtuals
 userSchema.virtual('fullName').get(function() {
   return this.firstName + ' ' + this.lastName;
 });
 
-/**
- * Helper method for getting user's gravatar.
- */
+// Generate a gravatar for the user
 userSchema.methods.gravatar = function(size: number) {
   if (!size) {
     size = 200;

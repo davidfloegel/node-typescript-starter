@@ -3,7 +3,8 @@ import { Before, After, AfterAll, Given, Then, When } from 'cucumber';
 import got from 'got';
 
 import MongoEnvironment from '../../test/db';
-import UserSchema, { User } from '../../src/context/auth/schema';
+import UserSchema from '../../src/context/auth/schema';
+import { User } from '../../src/context/auth/interfaces';
 
 Before(async () => {
   await MongoEnvironment.connect();

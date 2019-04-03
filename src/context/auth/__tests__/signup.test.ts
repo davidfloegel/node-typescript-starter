@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt-nodejs';
+
 import Auth from 'context/auth';
 import fakeUser from 'context/auth/__tests__/fake';
 import { EmailExistsError, ValidationError } from 'src/lib/errors';
@@ -48,6 +50,20 @@ describe('Authentication: Signup', () => {
     expect(newUser).toHaveProperty('firstName', newUser.firstName);
     expect(newUser).toHaveProperty('lastName', newUser.lastName);
     expect(newUser).toHaveProperty('flags.accountConfirmedAt', null);
+  });
+
+  it('it hashes the password', async () => {
+    const salt = bcrypt.genSaltSync(10);
+    bcrypt.genSaltSync = jest.fn().mockImplementation(() => salt);
+
+    const newUser = await Auth.signup({
+      email: 'mark.junior@gmail.com',
+      password: 'hashme',
+      firstName: 'Mark',
+      lastName: 'Junior',
+    });
+
+    expect(newUser).toHaveProperty('password', bcrypt.hashSync('hashme', salt));
   });
 
   it('it converts the email address to lowercase', async () => {
