@@ -20,10 +20,12 @@ I'm building this starter kit which includes things like
 * 💡 Context based setup
 * 🔑 Authentication Service
 * ✉️  Sendgrid Email Service
+* 🔋 Dockerised
+* 💅 Prettier
 
 ## To Dos
 
-- [ ] Run linting, tests & bdd on CI
+- [ ] Run linting, tests & bdd on CI via Docker
 
 ## Getting started
 
