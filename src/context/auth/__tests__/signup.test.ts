@@ -5,6 +5,8 @@ import { fakeUser } from 'context/auth/__tests__/fake';
 import { EmailExistsError, ValidationError } from 'src/lib/errors';
 import db from 'test/db';
 
+import VerificationTokenModel from 'context/auth/schema/verificationToken';
+
 beforeAll(async () => db.setup([fakeUser({ email: 'existing@gmail.com' })]));
 
 afterAll(async () => db.teardown());
@@ -75,5 +77,23 @@ describe('Authentication: Signup', () => {
     });
 
     expect(newUser).toHaveProperty('email', 'iammixedcase@gmail.com');
+  });
+
+  it('it generates and saves a new email verification token', async () => {
+    const newUser = await Auth.signup({
+      email: 'successful@gmail.com',
+      password: 'hello123',
+      firstName: 'Mark',
+      lastName: 'Dwayne',
+    });
+
+    expect(newUser).toBeDefined();
+
+    const token = await VerificationTokenModel.findOne({ userId: newUser._id });
+
+    expect(token).toBeDefined();
+    expect(token).toHaveProperty('_id');
+    expect(token).toHaveProperty('token');
+    expect(token).toHaveProperty('createdAt');
   });
 });
