@@ -23,11 +23,11 @@ export class BadRequestError extends ApiError {
   public code: string = 'bad-request-error';
   public statusCode: number = 400;
 
-  constructor(errors?: any) {
-    super('Bad Request');
+  constructor(msg?: string, errors?: any) {
+    super(msg || 'Bad Request');
 
     Object.setPrototypeOf(this, new.target.prototype);
-    this.errors = errors;
+    this.errors = errors || [];
   }
 }
 

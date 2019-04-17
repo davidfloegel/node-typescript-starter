@@ -23,3 +23,21 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     return next(e);
   }
 }
+
+export async function confirmAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const status = await Auth.confirmAccount(req.query.token);
+
+    return res.status(200).send(
+      generateResponse({
+        message: 'Your account has been verified',
+      })
+    );
+  } catch (e) {
+    return next(e);
+  }
+}

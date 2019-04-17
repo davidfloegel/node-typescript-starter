@@ -1,9 +1,11 @@
 import { expect } from 'chai';
 import { After, AfterAll, Before, Given, Then, When } from 'cucumber';
 import got from 'got';
+import mongoose from 'mongoose';
 
 import { User } from '../../src/context/auth/interfaces';
 import UserSchema from '../../src/context/auth/schema/user';
+import TokenSchema from '../../src/context/auth/schema/verificationToken';
 import MongoEnvironment from '../../test/db';
 
 Before(async () => {
@@ -16,18 +18,55 @@ After(async () => {
   return true;
 });
 
+const { ObjectId } = mongoose.mongo;
+
+// TODO extract into different steps file
 Given(/^there (?:is|are) the following (?:user|users)$/, async table => {
   const users = table.hashes();
 
   try {
     const saved = await Promise.all(
-      users.map((u: User) => new UserSchema(u).save())
+      users.map((u: any) =>
+        new UserSchema({
+          _id: u.id || null,
+          firstName: u.firstName,
+          lastName: u.lastName,
+          email: u.email,
+          password: u.password,
+          flags: {
+            accountConfirmedAt: u.confirmed === 'true' ? new Date() : null,
+          },
+        }).save()
+      )
     );
     return true;
   } catch (e) {
     throw Error(e);
   }
 });
+//
+// TODO extract into different steps file
+Given(
+  /^there (?:is|are) the following verification (?:token|tokens)$/,
+  async table => {
+    const tokens = table.hashes();
+
+    try {
+      const saved = await Promise.all(
+        tokens.map((t: any) =>
+          new TokenSchema({
+            userId: t.userId || new ObjectId(),
+            token: t.token,
+            createdAt: new Date(),
+          }).save()
+        )
+      );
+      return true;
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+);
 
 When('I make a GET request to {string}', async url => {
   try {
@@ -39,12 +78,50 @@ When('I make a GET request to {string}', async url => {
   }
 });
 
-When('I make a POST request to {string}', async (url, table) => {
+When('I make a POST request to {string} with payload', async (url, table) => {
   try {
-    const body = table.hashes()[0];
+    const body = table && table.hashes ? table.hashes()[0] : {};
     this.res = await got.post(`http://localhost:4000${url}`, {
       json: true,
       body,
+    });
+    return true;
+  } catch (e) {
+    this.res = e;
+    return;
+  }
+});
+
+When('I make a POST request to {string}', async url => {
+  try {
+    this.res = await got.post(`http://localhost:4000${url}`, {
+      json: true,
+    });
+    return true;
+  } catch (e) {
+    this.res = e;
+    return;
+  }
+});
+
+When('I make a PUT request to {string} with payload', async (url, table) => {
+  try {
+    const body = table && table.hashes ? table.hashes()[0] : {};
+    this.res = await got.put(`http://localhost:4000${url}`, {
+      json: true,
+      body,
+    });
+    return true;
+  } catch (e) {
+    this.res = e;
+    return;
+  }
+});
+
+When('I make a PUT request to {string}', async url => {
+  try {
+    this.res = await got.put(`http://localhost:4000${url}`, {
+      json: true,
     });
     return true;
   } catch (e) {
