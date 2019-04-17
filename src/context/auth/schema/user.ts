@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { NextFunction } from 'express';
 import mongoose from 'mongoose';
 
-import { comparePasswordFunction, User } from './interfaces';
+import { comparePasswordFunction, User } from '../interfaces';
 
 const userSchema = new mongoose.Schema(
   {
@@ -59,4 +59,4 @@ userSchema.methods.gravatar = function(size: number) {
   return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
 };
 
-export default mongoose.model<User>('User', userSchema);
+export default mongoose.model<User>('user', userSchema);

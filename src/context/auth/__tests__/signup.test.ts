@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt-nodejs';
 
 import Auth from 'context/auth';
-import fakeUser from 'context/auth/__tests__/fake';
+import { fakeUser } from 'context/auth/__tests__/fake';
 import { EmailExistsError, ValidationError } from 'src/lib/errors';
 import db from 'test/db';
 

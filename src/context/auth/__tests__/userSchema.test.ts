@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt-nodejs';
 
-import UserSchema from '../schema';
+import UserSchema from '../schema/user';
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -22,10 +22,6 @@ describe('User Schema', () => {
     expect(user).toHaveProperty('createdAt');
     expect(user).toHaveProperty('updatedAt');
   });
-
-  // it('it hashes the password upon save', async () => {
-  //   // TODO implement somehow
-  // });
 
   it('it generates a full name with virtuals', () => {
     expect(user).toHaveProperty('fullName', 'John Doe');

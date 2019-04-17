@@ -1,10 +1,10 @@
 import { expect } from 'chai';
-import { Before, After, AfterAll, Given, Then, When } from 'cucumber';
+import { After, AfterAll, Before, Given, Then, When } from 'cucumber';
 import got from 'got';
 
-import MongoEnvironment from '../../test/db';
-import UserSchema from '../../src/context/auth/schema';
 import { User } from '../../src/context/auth/interfaces';
+import UserSchema from '../../src/context/auth/schema/user';
+import MongoEnvironment from '../../test/db';
 
 Before(async () => {
   await MongoEnvironment.connect();

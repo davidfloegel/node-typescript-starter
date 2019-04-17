@@ -19,6 +19,18 @@ export class UnauthorizedError extends ApiError {
   }
 }
 
+export class BadRequestError extends ApiError {
+  public code: string = 'bad-request-error';
+  public statusCode: number = 400;
+
+  constructor(errors?: any) {
+    super('Bad Request');
+
+    Object.setPrototypeOf(this, new.target.prototype);
+    this.errors = errors;
+  }
+}
+
 export class InternalError extends ApiError {
   public code: string = 'internal-server-error';
   public statusCode: number = 500;

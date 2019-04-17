@@ -6,7 +6,7 @@ import {
   ValidationError,
 } from 'src/lib/errors';
 import { User } from './interfaces';
-import UserModel from './schema';
+import UserModel from './schema/user';
 
 export interface IAuthObject {
   user: {
@@ -54,7 +54,7 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
   }
 };
 
-const confirmAccount = (email: string): boolean => {
+const confirmAccount = (token: string): boolean => {
   return null;
 };
 
