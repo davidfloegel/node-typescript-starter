@@ -12,7 +12,9 @@ export default function errorHandler(
       code: err.code,
       statusCode: err.statusCode,
       error: err.message,
-      errors: err.errors || {},
+      data: {
+        errors: err.errors || {},
+      },
     });
 
     return next(err);
@@ -22,7 +24,9 @@ export default function errorHandler(
     code: 'unknown',
     statusCode: 500,
     error: err.message || 'Internal Server Error',
-    errors: {},
+    data: {
+      errors: {},
+    },
   });
 
   return next(err);

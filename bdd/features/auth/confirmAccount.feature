@@ -9,7 +9,7 @@ Feature: Confirm Account
     And the response error should be "The provided token is invalid"
 
   Scenario: I should see an error if no user has been registered for the given token
-    Given there is the following verification token
+    Given there is the following verification token:
       | token          |
       | idonthaveauser |
     When I make a PUT request to "/confirm-account?token=idonthaveauser"
@@ -17,10 +17,10 @@ Feature: Confirm Account
     And the response error should be "There is no user linked to this token"
 
   Scenario: I should see an error if my account has already been verified
-    Given there is the following user
-      | id                       | firstName | lastName | email          | password | confirmed |
-      | 5cb79292c006c907ca43ae79 | John      | Snow     | john@gmail.com | 12345    | true      |
-    Given there is the following verification token
+    Given there is the following user:
+      | id                       | email          | confirmed |
+      | 5cb79292c006c907ca43ae79 | john@gmail.com | true      |
+    And there is the following verification token:
       | userId                   | token           |
       | 5cb79292c006c907ca43ae79 | alreadyverified |
     When I make a PUT request to "/confirm-account?token=alreadyverified"
@@ -28,10 +28,10 @@ Feature: Confirm Account
     And the response error should be "This account has already been verified"
 
   Scenario: I should see a success response if my account has been verified
-    Given there is the following user
-      | id                       | firstName | lastName | email          | password |
-      | 5cb79292c006c907ca43ae78 | John      | Snow     | john@gmail.com | 12345    |
-    Given there is the following verification token
+    Given there is the following user:
+      | id                       |
+      | 5cb79292c006c907ca43ae78 |
+    And there is the following verification token:
       | userId                   | token           |
       | 5cb79292c006c907ca43ae78 | verifyme        |
     When I make a PUT request to "/confirm-account?token=verifyme"

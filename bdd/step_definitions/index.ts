@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { After, AfterAll, Before, Given, Then, When } from 'cucumber';
 import got from 'got';
 import mongoose from 'mongoose';
+import faker from 'faker';
 
 import { User } from '../../src/context/auth/interfaces';
 import UserSchema from '../../src/context/auth/schema/user';
@@ -21,7 +22,7 @@ After(async () => {
 const { ObjectId } = mongoose.mongo;
 
 // TODO extract into different steps file
-Given(/^there (?:is|are) the following (?:user|users)$/, async table => {
+Given(/^there (?:is|are) the following (?:user|users):$/, async table => {
   const users = table.hashes();
 
   try {
@@ -29,10 +30,10 @@ Given(/^there (?:is|are) the following (?:user|users)$/, async table => {
       users.map((u: any) =>
         new UserSchema({
           _id: u.id || null,
-          firstName: u.firstName,
-          lastName: u.lastName,
-          email: u.email,
-          password: u.password,
+          firstName: u.firstName || faker.name.firstName(),
+          lastName: u.lastName || faker.name.lastName(),
+          email: u.email || faker.internet.email(),
+          password: u.password || faker.internet.password(),
           flags: {
             accountConfirmedAt: u.confirmed === 'true' ? new Date() : null,
           },
@@ -47,7 +48,7 @@ Given(/^there (?:is|are) the following (?:user|users)$/, async table => {
 //
 // TODO extract into different steps file
 Given(
-  /^there (?:is|are) the following verification (?:token|tokens)$/,
+  /^there (?:is|are) the following verification (?:token|tokens):$/,
   async table => {
     const tokens = table.hashes();
 
@@ -78,7 +79,7 @@ When('I make a GET request to {string}', async url => {
   }
 });
 
-When('I make a POST request to {string} with payload', async (url, table) => {
+When('I make a POST request to {string} with payload:', async (url, table) => {
   try {
     const body = table && table.hashes ? table.hashes()[0] : {};
     this.res = await got.post(`http://localhost:4000${url}`, {
@@ -104,7 +105,7 @@ When('I make a POST request to {string}', async url => {
   }
 });
 
-When('I make a PUT request to {string} with payload', async (url, table) => {
+When('I make a PUT request to {string} with payload:', async (url, table) => {
   try {
     const body = table && table.hashes ? table.hashes()[0] : {};
     this.res = await got.put(`http://localhost:4000${url}`, {
@@ -134,15 +135,24 @@ Then('the response status code should be {int}', statusCode => {
   expect(this.res.statusCode).to.eql(statusCode);
 });
 
-Then(/^the response (error|message) should be "(.*)"$/, (type, msg) => {
+Then(/^the response (error|message) should be "([^"]*)"$/, (type, msg) => {
   expect(this.res.body[type]).to.eql(msg);
 });
 
-Then(/^the response should contain a "(.*)" property/, field => {
+Then(/^the response should contain a "([^"]*)" property$/, field => {
   expect(this.res.body.data).to.have.property(field);
 });
 
-Then('the body of the response should be {string}', res => {
-  const body = JSON.parse(this.res.body);
-  expect(body.data).to.eql(res);
-});
+Then(
+  /^the response should contain a "([^"]*)" property with the attributes:$/,
+  (field, table) => {
+    const expectedObj: any = {};
+
+    table.hashes().forEach((row: any) => {
+      expectedObj[row.key] = row.value;
+    });
+
+    expect(this.res.body.data).to.have.property(field);
+    expect(this.res.body.data[field]).to.eql(expectedObj);
+  }
+);

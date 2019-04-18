@@ -3207,9 +3207,10 @@ ms@2.1.1, ms@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
 
-muso-validatejs@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/muso-validatejs/-/muso-validatejs-0.2.0.tgz#b8081fd0e4faa9eee531625d6aa74c925e9c2ca2"
+muso-validatejs@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/muso-validatejs/-/muso-validatejs-0.2.3.tgz#c2c2f404eff34901cb978909e0528cea6570c0ac"
+  integrity sha512-Lv6yzPbFfNYuhV4Zpz6e8dgSyHYw1gaY5h59B4/eKMzOiKR9Z+n7juF2DKriGx7kl8Jd6KL2zumn+sV7FgyOVw==
   dependencies:
     lodash "^4.17.4"
 
