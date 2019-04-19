@@ -49,7 +49,7 @@ describe('Error Handler Middleware', () => {
     expect(data).toHaveProperty('code', 'unknown');
     expect(data).toHaveProperty('statusCode', 500);
     expect(data).toHaveProperty('error', 'Internal Server Error');
-    expect(data).toHaveProperty('errors', {});
+    expect(data).toHaveProperty('data.errors', {});
   });
 
   it('it should handle custom errors', () => {
@@ -62,6 +62,6 @@ describe('Error Handler Middleware', () => {
     expect(data).toHaveProperty('code', 'custom-error');
     expect(data).toHaveProperty('statusCode', 400);
     expect(data).toHaveProperty('error', 'My Custom Error');
-    expect(data).toHaveProperty('errors', { ping: 'pong' });
+    expect(data).toHaveProperty('data.errors', { ping: 'pong' });
   });
 });

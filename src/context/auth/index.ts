@@ -27,15 +27,15 @@ export interface ISignupFormData {
 }
 
 const signup = async (formData: ISignupFormData): Promise<User> => {
-  const validation = validate(formData, {
+  const validationFails = validate(formData, {
     email: { presence: true, email: true },
     password: { presence: true, length: { minimum: 4 } },
     firstName: { presence: true, length: { minimum: 2 } },
     lastName: { presence: true, length: { minimum: 2 } },
   });
 
-  if (validation) {
-    throw new ValidationError(validation);
+  if (validationFails) {
+    throw new ValidationError(validationFails);
   }
 
   const newUser = new UserModel({
