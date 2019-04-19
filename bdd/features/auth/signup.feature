@@ -43,6 +43,16 @@ Feature: Create Account
       | key      | values                                        |
       | lastName | Last name is too short (minimum is 2 characters) |
 
+  Scenario: I should see an error if the email address is missing
+    When I make a POST request to "/signup" with payload:
+      | firstName | lastName | password  |
+      | Aria      | Stark    | password1 |
+    Then the response status code should be 400
+    And the response error should be "Form validation failed"
+    And the response should contain a "errors" property with the attributes:
+      | key   | values               |
+      | email | Email can't be blank |
+
   Scenario: I should see an error if the email address is invalid
     When I make a POST request to "/signup" with payload:
       | firstName | lastName  | email   | password  |
