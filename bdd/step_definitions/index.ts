@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 import { After, AfterAll, Before, Given, Then, When } from 'cucumber';
-import got from 'got';
-import mongoose from 'mongoose';
 import faker from 'faker';
+import got from 'got';
+import _ from 'lodash';
+import mongoose from 'mongoose';
 
 import { User } from '../../src/context/auth/interfaces';
 import UserSchema from '../../src/context/auth/schema/user';
@@ -149,7 +150,7 @@ Then(
     const expectedObj: any = {};
 
     table.hashes().forEach((row: any) => {
-      expectedObj[row.key] = row.value;
+      expectedObj[row.key] = row.values ? [row.values] : row.value;
     });
 
     expect(this.res.body.data).to.have.property(field);

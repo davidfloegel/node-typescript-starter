@@ -10,8 +10,8 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key       | value                  |
-      | firstName | First name is required |
+      | key       | values                    |
+      | firstName | First name can't be blank |
 
   Scenario: I should see an error if the first name is too short
     When I make a POST request to "/signup" with payload:
@@ -20,8 +20,18 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key       | value                          |
-      | firstName | First name should be minimum 2 |
+      | key       | values                                            |
+      | firstName | First name is too short (minimum is 2 characters) |
+
+  Scenario: I should see an error if the last name is missing
+    When I make a POST request to "/signup" with payload:
+      | firstName | email          | password  |
+      | Aria      | aria@gmail.com | password1 |
+    Then the response status code should be 400
+    And the response error should be "Form validation failed"
+    And the response should contain a "errors" property with the attributes:
+      | key       | values                    |
+      | lastName  | Last name can't be blank |
 
   Scenario: I should see an error if the last name is too short
     When I make a POST request to "/signup" with payload:
@@ -30,8 +40,8 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key      | value                         |
-      | lastName | Last name should be minimum 2 |
+      | key      | values                                        |
+      | lastName | Last name is too short (minimum is 2 characters) |
 
   Scenario: I should see an error if the email address is invalid
     When I make a POST request to "/signup" with payload:
@@ -40,8 +50,18 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key   | value                               |
-      | email | Email should be valid email address |
+      | key   | values                     |
+      | email | Email is not a valid email |
+
+  Scenario: I should see an error if the password is missing
+    When I make a POST request to "/signup" with payload:
+      | firstName | lastName | email          |
+      | Aria      | stark    | aria@gmail.com |
+    Then the response status code should be 400
+    And the response error should be "Form validation failed"
+    And the response should contain a "errors" property with the attributes:
+      | key      | values                  |
+      | password | Password can't be blank |
 
   Scenario: I should see an error if the password is too short
     When I make a POST request to "/signup" with payload:
@@ -50,8 +70,8 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key      | value                        |
-      | password | Password should be minimum 4 |
+      | key      | values                                          |
+      | password | Password is too short (minimum is 4 characters) |
 
   Scenario: I should see an error if my email address is already registered
     Given there is the following user:

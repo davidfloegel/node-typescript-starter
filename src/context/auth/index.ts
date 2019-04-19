@@ -1,4 +1,3 @@
-import Validator from 'muso-validatejs';
 import {
   BadRequestError,
   DUPLICATE_ERROR_CODE,
@@ -6,6 +5,7 @@ import {
   InternalError,
   ValidationError,
 } from 'src/lib/errors';
+import validate from 'validate.js';
 import { User } from './interfaces';
 import UserModel from './schema/user';
 import VerificationTokenModel from './schema/verificationToken';
@@ -27,16 +27,15 @@ export interface ISignupFormData {
 }
 
 const signup = async (formData: ISignupFormData): Promise<User> => {
-  const validation = Validator.check(formData, {
-    email: { required: true, email: true },
-    password: { required: true, type: 'string', min: 4 },
-    firstName: { required: true, type: 'alphanum', min: 2 },
-    lastName: { required: true, type: 'alphanum', min: 2 },
+  const validation = validate(formData, {
+    email: { presence: true, email: true },
+    password: { presence: true, length: { minimum: 4 } },
+    firstName: { presence: true, length: { minimum: 2 } },
+    lastName: { presence: true, length: { minimum: 2 } },
   });
 
-  if (validation.failed()) {
-    const errors = validation.errors().asSentence();
-    throw new ValidationError(errors);
+  if (validation) {
+    throw new ValidationError(validation);
   }
 
   const newUser = new UserModel({
