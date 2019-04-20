@@ -30,11 +30,26 @@ export async function confirmAccount(
   next: NextFunction
 ) {
   try {
-    const status = await Auth.confirmAccount(req.query.token);
+    const status = await Auth.confirmAccount(req.body.token);
 
     return res.status(200).send(
       generateResponse({
         message: 'Your account has been verified',
+      })
+    );
+  } catch (e) {
+    return next(e);
+  }
+}
+
+export async function signin(req: Request, res: Response, next: NextFunction) {
+  try {
+    const authInfo = await Auth.login(req.body);
+
+    return res.status(200).send(
+      generateResponse({
+        message: 'Login successful',
+        data: authInfo,
       })
     );
   } catch (e) {

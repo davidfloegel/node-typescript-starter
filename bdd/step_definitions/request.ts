@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Then, When } from 'cucumber';
 import got from 'got';
+import _ from 'lodash';
 
 When('I make a GET request to {string}', async url => {
   try {
@@ -82,7 +83,7 @@ Then(
     const expectedObj: any = {};
 
     table.hashes().forEach((row: any) => {
-      expectedObj[row.key] = row.values ? [row.values] : row.value;
+      _.set(expectedObj, row.key, row.value);
     });
 
     expect(this.res.body.data).to.have.property(field);

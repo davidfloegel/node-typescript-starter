@@ -6,8 +6,8 @@ import db from 'test/db';
 import UserModel from '../schema/user';
 import TokenModel from '../schema/verificationToken';
 
-const user1 = fakeUser({ accountConfirmedAt: true });
-const user2 = fakeUser();
+const user1 = fakeUser();
+const user2 = fakeUser({ notConfirmed: true });
 
 beforeAll(async () =>
   db.setup([

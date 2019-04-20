@@ -17,6 +17,24 @@ describe('Test Errors & Error Codes', () => {
     );
   });
 
+  it('Unauthorized Error with custom message', () => {
+    const e = new Errors.UnauthorizedError('Custom error');
+
+    expect(e).toBeInstanceOf(Error);
+    expect(e).toHaveProperty('code', 'unauthorized');
+    expect(e).toHaveProperty('statusCode', 401);
+    expect(e).toHaveProperty('message', 'Custom error');
+  });
+
+  it('Credentials Invalid Error', () => {
+    const e = new Errors.CrendentialsInvalidError();
+
+    expect(e).toBeInstanceOf(Error);
+    expect(e).toHaveProperty('code', 'credentials-invalid-error');
+    expect(e).toHaveProperty('statusCode', 401);
+    expect(e).toHaveProperty('message', 'Email address or password incorrect');
+  });
+
   it('Internal Error', () => {
     const e = new Errors.InternalError();
 

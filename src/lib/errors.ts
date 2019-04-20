@@ -12,8 +12,19 @@ export class UnauthorizedError extends ApiError {
   public code: string = 'unauthorized';
   public statusCode: number = 401;
 
+  constructor(msg?: string) {
+    super(msg || 'You are not authorized to access this endpoint');
+
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+export class CrendentialsInvalidError extends ApiError {
+  public code: string = 'credentials-invalid-error';
+  public statusCode: number = 401;
+
   constructor() {
-    super('You are not authorized to access this endpoint');
+    super('Email address or password incorrect');
 
     Object.setPrototypeOf(this, new.target.prototype);
   }

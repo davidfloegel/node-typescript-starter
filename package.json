@@ -35,6 +35,7 @@
     "express": "^4.16.4",
     "faker": "^4.1.0",
     "fs": "^0.0.1-security",
+    "jwt-simple": "^0.5.6",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.20",
     "nodemailer": "^5.1.1",

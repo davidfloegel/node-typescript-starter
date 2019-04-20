@@ -1,19 +1,27 @@
 import {
   BadRequestError,
+  CrendentialsInvalidError,
   DUPLICATE_ERROR_CODE,
   EmailExistsError,
   InternalError,
+  UnauthorizedError,
   ValidationError,
 } from 'src/lib/errors';
 import validate from 'validate.js';
+
+import { generateRandomHash } from 'utils/string';
+
 import { User } from './interfaces';
 import UserModel from './schema/user';
 import VerificationTokenModel from './schema/verificationToken';
 
-import { generateRandomHash } from 'utils/string';
+import { generateToken } from './utils';
 
 export interface IAuthObject {
   user: {
+    _id: string;
+    firstName: string;
+    lastName: string;
     email: string;
   };
   token: string;
@@ -26,16 +34,21 @@ export interface ISignupFormData {
   lastName: string;
 }
 
+export interface ISigninFormData {
+  email: string;
+  password: string;
+}
+
 const signup = async (formData: ISignupFormData): Promise<User> => {
-  const validationFails = validate(formData, {
+  const validationFailed = validate(formData, {
     email: { presence: true, email: true },
     password: { presence: true, length: { minimum: 4 } },
     firstName: { presence: true, length: { minimum: 2 } },
     lastName: { presence: true, length: { minimum: 2 } },
   });
 
-  if (validationFails) {
-    throw new ValidationError(validationFails);
+  if (validationFailed) {
+    throw new ValidationError(validationFailed);
   }
 
   const newUser = new UserModel({
@@ -56,7 +69,7 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
 
     await verificationToken.save();
 
-    // TODO send an email
+    // TODO send an email with verification link
 
     return persisted.toObject();
   } catch (e) {
@@ -97,14 +110,56 @@ const confirmAccount = async (token: string): Promise<boolean> => {
   if (updatedUser.ok === 1) {
     await VerificationTokenModel.deleteOne({ token });
 
+    // TODO send verification email
+
     return true;
   }
 
   return false;
 };
 
-const login = (email: string, password: string): IAuthObject => {
-  return null;
+const login = async (formData: ISigninFormData): Promise<IAuthObject> => {
+  const validationFailed = validate(formData, {
+    email: { presence: true, email: true },
+    password: { presence: true },
+  });
+
+  if (validationFailed) {
+    throw new ValidationError(validationFailed);
+  }
+
+  const user = await UserModel.findOne(
+    { email: formData.email },
+    {
+      email: 1,
+      password: 1,
+      firstName: 1,
+      lastName: 1,
+      'flags.accountConfirmedAt': 1,
+    }
+  );
+
+  if (!user) {
+    throw new CrendentialsInvalidError();
+  }
+
+  if (!user.flags.accountConfirmedAt) {
+    throw new UnauthorizedError("Your account hasn't been verified yet");
+  }
+
+  if (!(await user.comparePassword(formData.password))) {
+    throw new CrendentialsInvalidError();
+  }
+
+  return {
+    user: {
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
+    token: generateToken(user._id),
+  };
 };
 
 export default {

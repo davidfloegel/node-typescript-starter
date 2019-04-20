@@ -22,7 +22,7 @@ Given(/^there (?:is|are) the following (?:user|users):$/, async table => {
           email: u.email || faker.internet.email(),
           password: u.password || faker.internet.password(),
           flags: {
-            accountConfirmedAt: u.confirmed === 'true' ? new Date() : null,
+            accountConfirmedAt: u.confirmed === 'false' ? null : new Date(),
           },
         }).save()
       )

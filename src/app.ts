@@ -50,6 +50,7 @@ app.get('/ping', (req: Request, res: Response) =>
   res.status(200).send({ data: 'pong' })
 );
 app.post('/signup', AuthController.signup);
+app.post('/signin', AuthController.signin);
 app.put('/confirm-account', AuthController.confirmAccount);
 
 export default app;

@@ -12,28 +12,34 @@ Feature: Confirm Account
     Given there is the following verification token:
       | token          |
       | idonthaveauser |
-    When I make a PUT request to "/confirm-account?token=idonthaveauser"
+    When I make a PUT request to "/confirm-account" with payload:
+      | token          |
+      | idonthaveauser |
     Then the response status code should be 400
     And the response error should be "There is no user linked to this token"
 
   Scenario: I should receive an error if my account has already been verified
     Given there is the following user:
-      | id                       | email          | confirmed |
-      | 5cb79292c006c907ca43ae79 | john@gmail.com | true      |
+      | id                       | email          |
+      | 5cb79292c006c907ca43ae79 | john@gmail.com |
     And there is the following verification token:
       | userId                   | token           |
       | 5cb79292c006c907ca43ae79 | alreadyverified |
-    When I make a PUT request to "/confirm-account?token=alreadyverified"
+    When I make a PUT request to "/confirm-account" with payload:
+      | token           |
+      | alreadyverified |
     Then the response status code should be 400
     And the response error should be "This account has already been verified"
 
   Scenario: I should receive a success response if my account has been verified
     Given there is the following user:
-      | id                       |
-      | 5cb79292c006c907ca43ae78 |
+      | id                       | confirmed |
+      | 5cb79292c006c907ca43ae78 | false     |
     And there is the following verification token:
       | userId                   | token           |
       | 5cb79292c006c907ca43ae78 | verifyme        |
-    When I make a PUT request to "/confirm-account?token=verifyme"
+    When I make a PUT request to "/confirm-account" with payload:
+      | token    |
+      | verifyme |
     Then the response status code should be 200
     And the response message should be "Your account has been verified"
