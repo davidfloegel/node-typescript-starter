@@ -4,9 +4,7 @@ Feature: Recover Account
   Incase I have forgotten my password
 
   Scenario: I should receive an error if the email address is missing
-    When I make a POST request to "/recover-account" with payload:
-      | password  |
-      | password1 |
+    When I make a POST request to "/recover-account"
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
@@ -15,8 +13,8 @@ Feature: Recover Account
 
   Scenario: I should receive an error if the email address is invalid
     When I make a POST request to "/recover-account" with payload:
-      | email   | password  |
-      | invalid | password1 |
+      | email   |
+      | invalid |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
