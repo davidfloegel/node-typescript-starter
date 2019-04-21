@@ -16,7 +16,7 @@ import RecoveryTokenModel from './schema/recoveryToken';
 import UserModel from './schema/user';
 import VerificationTokenModel from './schema/verificationToken';
 
-import { generateToken } from './utils';
+import { generateToken, hashPassword } from './utils';
 
 export interface IAuthObject {
   user: {
@@ -248,7 +248,7 @@ const resetPassword = async (
       { _id: user._id },
       {
         $set: {
-          password: formData.newPassword,
+          password: hashPassword(formData.newPassword),
         },
       }
     );

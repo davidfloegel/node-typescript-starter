@@ -4,6 +4,7 @@ import { NextFunction } from 'express';
 import mongoose from 'mongoose';
 
 import { comparePasswordFunction, User } from '../interfaces';
+import { hashPassword } from '../utils';
 
 const userSchema = new mongoose.Schema(
   {
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema(
 
 // Before saving the user, hash the password
 userSchema.pre<User>('save', function(next: NextFunction) {
-  this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
+  this.password = hashPassword(this.password);
   next();
 });
 
