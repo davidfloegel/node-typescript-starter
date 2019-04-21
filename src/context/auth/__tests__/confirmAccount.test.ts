@@ -33,24 +33,18 @@ describe('Authentication: Confirm Account', () => {
     await expect(Auth.confirmAccount('idonotexist')).rejects.toThrowError(
       BadRequestError
     );
-
-    // TODO find a way to check the error details
   });
 
   it('it throws an error if no user exists for the given token', async () => {
     await expect(Auth.confirmAccount('iamatoken')).rejects.toThrowError(
       BadRequestError
     );
-
-    // TODO find a way to check the error details
   });
 
   it('it throws an error if the account is already confirmed', async () => {
     await expect(Auth.confirmAccount('alreadyverified')).rejects.toThrowError(
       BadRequestError
     );
-
-    // TODO find a way to check the error details
   });
 
   it('it successfully confirms the user account', async () => {

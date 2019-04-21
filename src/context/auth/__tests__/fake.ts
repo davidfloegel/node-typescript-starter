@@ -1,6 +1,7 @@
 import faker from 'faker';
 import mongoose from 'mongoose';
 
+import RecoveryTokenModel from '../schema/recoveryToken';
 import UserModel from '../schema/user';
 import VerificationTokenModel from '../schema/verificationToken';
 
@@ -20,6 +21,14 @@ export const fakeUser = (data: any = {}) => {
 
 export const fakeVerificationToken = (data: any = {}) => {
   return new VerificationTokenModel({
+    userId: data.userId ? new ObjectId(data.userId) : new ObjectId(),
+    token: data.token,
+    createdAt: new Date(),
+  });
+};
+
+export const fakeRecoveryToken = (data: any = {}) => {
+  return new RecoveryTokenModel({
     userId: data.userId ? new ObjectId(data.userId) : new ObjectId(),
     token: data.token,
     createdAt: new Date(),

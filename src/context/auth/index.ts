@@ -12,6 +12,7 @@ import validate from 'validate.js';
 import { generateRandomHash } from 'utils/string';
 
 import { User } from './interfaces';
+import RecoveryTokenModel from './schema/recoveryToken';
 import UserModel from './schema/user';
 import VerificationTokenModel from './schema/verificationToken';
 
@@ -37,6 +38,10 @@ export interface ISignupFormData {
 export interface ISigninFormData {
   email: string;
   password: string;
+}
+
+export interface IRecoverAccountFormData {
+  email: string;
 }
 
 const signup = async (formData: ISignupFormData): Promise<User> => {
@@ -98,24 +103,27 @@ const confirmAccount = async (token: string): Promise<boolean> => {
     throw new BadRequestError('This account has already been verified');
   }
 
-  const updatedUser = await UserModel.updateOne(
-    { _id: findUser._id },
-    {
-      $set: {
-        'flags.accountConfirmedAt': new Date(),
-      },
+  try {
+    const updatedUser = await UserModel.updateOne(
+      { _id: findUser._id },
+      {
+        $set: {
+          'flags.accountConfirmedAt': new Date(),
+        },
+      }
+    );
+
+    if (updatedUser.ok === 1) {
+      await VerificationTokenModel.deleteOne({ token });
+
+      // TODO send verification email
+
+      return true;
     }
-  );
-
-  if (updatedUser.ok === 1) {
-    await VerificationTokenModel.deleteOne({ token });
-
-    // TODO send verification email
-
-    return true;
+    return false;
+  } catch (e) {
+    throw new InternalError();
   }
-
-  return false;
 };
 
 const login = async (formData: ISigninFormData): Promise<IAuthObject> => {
@@ -162,8 +170,48 @@ const login = async (formData: ISigninFormData): Promise<IAuthObject> => {
   };
 };
 
+const recoverAccount = async (
+  formData: IRecoverAccountFormData
+): Promise<boolean> => {
+  const validationFailed = validate(formData, {
+    email: { presence: true, email: true },
+  });
+
+  if (validationFailed) {
+    throw new ValidationError(validationFailed);
+  }
+
+  const user = await UserModel.findOne({ email: formData.email });
+
+  if (!user) {
+    throw new BadRequestError('Email address is not registered');
+  }
+
+  const existingToken = await RecoveryTokenModel.findOne({ userId: user._id });
+  if (existingToken) {
+    await RecoveryTokenModel.deleteOne({ _id: existingToken._id });
+  }
+
+  try {
+    const token = new RecoveryTokenModel({
+      userId: user._id,
+      token: generateRandomHash(32),
+      createdAt: new Date(),
+    });
+
+    const savedToken = await token.save();
+
+    // @TODO send email
+
+    return true;
+  } catch (e) {
+    throw new InternalError();
+  }
+};
+
 export default {
   signup,
   confirmAccount,
   login,
+  recoverAccount,
 };

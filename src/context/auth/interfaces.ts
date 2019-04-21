@@ -28,3 +28,9 @@ export type VerificationToken = mongoose.Document & {
   token: string;
   createdAt: Date;
 };
+
+export type RecoveryToken = mongoose.Document & {
+  userId: ObjectId;
+  token: string;
+  createdAt: Date;
+};
