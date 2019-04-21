@@ -10,7 +10,7 @@ Feature: Sign In to Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value               |
+      | key     | value                |
       | email.0 | Email can't be blank |
 
   Scenario: I should receive an error if the email address is invalid
@@ -20,7 +20,7 @@ Feature: Sign In to Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value                     |
+      | key     | value                      |
       | email.0 | Email is not a valid email |
 
   Scenario: I should receive an error if the password is missing

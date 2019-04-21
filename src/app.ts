@@ -51,6 +51,7 @@ app.get('/ping', (req: Request, res: Response) =>
 );
 app.post('/signup', AuthController.signup);
 app.post('/signin', AuthController.signin);
+app.post('/recover-account', AuthController.recoverAccount);
 app.put('/confirm-account', AuthController.confirmAccount);
 
 export default app;

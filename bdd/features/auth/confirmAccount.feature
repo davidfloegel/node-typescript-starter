@@ -4,7 +4,9 @@ Feature: Confirm Account
   So I can start use login to my account
 
   Scenario: I should receive an error if the token is invalid
-    When I make a PUT request to "/confirm-account?token=123"
+    When I make a PUT request to "/confirm-account" with payload:
+      | token   |
+      | invalid |
     Then the response status code should be 400
     And the response error should be "The provided token is invalid"
 

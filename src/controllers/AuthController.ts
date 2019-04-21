@@ -56,3 +56,21 @@ export async function signin(req: Request, res: Response, next: NextFunction) {
     return next(e);
   }
 }
+
+export async function recoverAccount(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const status = await Auth.recoverAccount(req.body);
+
+    return res.status(200).send(
+      generateResponse({
+        message: `A recovery link has been sent to ${req.body.email}`,
+      })
+    );
+  } catch (e) {
+    return next(e);
+  }
+}
