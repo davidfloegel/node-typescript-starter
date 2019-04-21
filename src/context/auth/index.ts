@@ -44,6 +44,12 @@ export interface IRecoverAccountFormData {
   email: string;
 }
 
+export interface IResetPasswordFormData {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 const signup = async (formData: ISignupFormData): Promise<User> => {
   const validationFailed = validate(formData, {
     email: { presence: true, email: true },
@@ -209,9 +215,61 @@ const recoverAccount = async (
   }
 };
 
+const resetPassword = async (
+  formData: IResetPasswordFormData
+): Promise<boolean> => {
+  const findToken = await RecoveryTokenModel.findOne({ token: formData.token });
+
+  if (!findToken) {
+    throw new BadRequestError('Recovery token is invalid or expired');
+  }
+
+  const user = await UserModel.findById(findToken.userId);
+
+  if (!user) {
+    throw new BadRequestError('Recovery token is invalid or expired');
+  }
+
+  const validationFailed = validate(formData, {
+    newPassword: { presence: true, length: { minimum: 4 } },
+    confirmPassword: { presence: true },
+  });
+
+  if (validationFailed) {
+    throw new ValidationError(validationFailed);
+  }
+
+  if (formData.newPassword !== formData.confirmPassword) {
+    throw new BadRequestError("New password and confirmation don't match");
+  }
+
+  try {
+    const updatedUser = await UserModel.updateOne(
+      { _id: user._id },
+      {
+        $set: {
+          password: formData.newPassword,
+        },
+      }
+    );
+
+    if (updatedUser.ok === 1) {
+      await RecoveryTokenModel.deleteOne({ token: formData.token });
+
+      // TODO send confirmation email
+
+      return true;
+    }
+    return false;
+  } catch (e) {
+    throw new InternalError();
+  }
+};
+
 export default {
   signup,
   confirmAccount,
   login,
+  resetPassword,
   recoverAccount,
 };

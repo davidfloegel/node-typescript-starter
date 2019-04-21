@@ -4,8 +4,9 @@ import faker from 'faker';
 import mongoose from 'mongoose';
 
 import { User } from '../../src/context/auth/interfaces';
+import RecoveryTokenSchema from '../../src/context/auth/schema/recoveryToken';
 import UserSchema from '../../src/context/auth/schema/user';
-import TokenSchema from '../../src/context/auth/schema/verificationToken';
+import VerificationTokenSchema from '../../src/context/auth/schema/verificationToken';
 
 const { ObjectId } = mongoose.mongo;
 
@@ -41,7 +42,29 @@ Given(
     try {
       const saved = await Promise.all(
         tokens.map((t: any) =>
-          new TokenSchema({
+          new VerificationTokenSchema({
+            userId: t.userId || new ObjectId(),
+            token: t.token,
+            createdAt: new Date(),
+          }).save()
+        )
+      );
+      return true;
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+);
+
+Given(
+  /^there (?:is|are) the following recovery (?:token|tokens):$/,
+  async table => {
+    const tokens = table.hashes();
+
+    try {
+      const saved = await Promise.all(
+        tokens.map((t: any) =>
+          new RecoveryTokenSchema({
             userId: t.userId || new ObjectId(),
             token: t.token,
             createdAt: new Date(),

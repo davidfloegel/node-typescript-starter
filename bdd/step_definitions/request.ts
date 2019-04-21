@@ -82,11 +82,11 @@ Then(
   (field, table) => {
     const expectedObj: any = {};
 
-    table.hashes().forEach((row: any) => {
-      _.set(expectedObj, row.key, row.value);
-    });
-
     expect(this.res.body.data).to.have.property(field);
-    expect(this.res.body.data[field]).to.eql(expectedObj);
+
+    table.hashes().forEach((row: any) => {
+      // _.set(expectedObj, row.key, row.value);
+      expect(_.get(this.res.body.data[field], row.key)).to.eql(row.value);
+    });
   }
 );

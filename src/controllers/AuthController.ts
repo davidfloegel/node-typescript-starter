@@ -74,3 +74,21 @@ export async function recoverAccount(
     return next(e);
   }
 }
+
+export async function resetPassword(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const status = await Auth.resetPassword(req.body);
+
+    return res.status(200).send(
+      generateResponse({
+        message: 'Your password has been reset',
+      })
+    );
+  } catch (e) {
+    return next(e);
+  }
+}
