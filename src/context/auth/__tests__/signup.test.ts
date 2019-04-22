@@ -2,10 +2,13 @@ import bcrypt from 'bcrypt-nodejs';
 
 import Auth from 'context/auth';
 import { fakeUser } from 'context/auth/__tests__/fake';
+import * as action from 'src/lib/actions';
 import { EmailExistsError, ValidationError } from 'src/lib/errors';
 import db from 'test/db';
 
 import VerificationTokenModel from 'context/auth/schema/verificationToken';
+
+jest.spyOn(action, 'fire');
 
 beforeAll(async () => db.setup([fakeUser({ email: 'existing@gmail.com' })]));
 
@@ -52,6 +55,21 @@ describe('Authentication: Signup', () => {
     expect(newUser).toHaveProperty('firstName', newUser.firstName);
     expect(newUser).toHaveProperty('lastName', newUser.lastName);
     expect(newUser).toHaveProperty('flags.accountConfirmedAt', null);
+  });
+
+  it('it triggers an action when an account has been created', async () => {
+    const newUser = await Auth.signup({
+      email: 'anotheruser@gmail.com',
+      password: 'hello123',
+      firstName: 'Aria',
+      lastName: 'Stark',
+    });
+
+    expect(action.fire).toHaveBeenCalledWith(action.actions.SIGNUP, {
+      firstName: 'Aria',
+      email: 'anotheruser@gmail.com',
+      verificationToken: expect.anything(),
+    });
   });
 
   it('it hashes the password', async () => {

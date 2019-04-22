@@ -79,7 +79,7 @@ describe('Authentication: Reset Password', () => {
   });
 
   it('it successfully resets the users password', async () => {
-    bcrypt.genSaltSync = jest.fn();
+    // bcrypt.genSaltSync = jest.fn();
     jest
       .spyOn(bcrypt, 'genSaltSync')
       .mockImplementation(() => '$2a$10$s2Z.yWoC9AKG8QG.ZekUU.');

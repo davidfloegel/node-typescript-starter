@@ -1,3 +1,6 @@
+import validate from 'validate.js';
+
+import { actions, fire } from 'src/lib/actions';
 import {
   BadRequestError,
   CrendentialsInvalidError,
@@ -7,8 +10,6 @@ import {
   UnauthorizedError,
   ValidationError,
 } from 'src/lib/errors';
-import validate from 'validate.js';
-
 import { generateRandomHash } from 'utils/string';
 
 import { User } from './interfaces';
@@ -72,15 +73,21 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
   try {
     const persisted = await newUser.save();
 
+    const token = generateRandomHash();
+
     const verificationToken = new VerificationTokenModel({
       userId: persisted._id,
-      token: generateRandomHash(),
       createdAt: new Date(),
+      token,
     });
 
     await verificationToken.save();
 
-    // TODO send an email with verification link
+    fire(actions.SIGNUP, {
+      firstName: persisted.firstName,
+      email: persisted.email,
+      verificationToken: token,
+    });
 
     return persisted.toObject();
   } catch (e) {
