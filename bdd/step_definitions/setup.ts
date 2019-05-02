@@ -29,7 +29,7 @@ Given(/^I am logged in$/, async function() {
   return false;
 });
 
-Given(/^I attach an authorization token to the request$/, function() {
+Given(/^I attach a valid authorization token to the request$/, function() {
   this.requestHeaders = {
     Authorization: this.token,
   };

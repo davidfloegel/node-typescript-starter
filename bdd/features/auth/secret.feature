@@ -7,6 +7,6 @@ Feature: Secret Route
 
   Scenario: I should receive a response if I am logged in
     Given I am logged in
-    And I attach an authorization token to the request
+    And I attach a valid authorization token to the request
     When I make a GET request to "/secret"
     Then the response status code should be 200
