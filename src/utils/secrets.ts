@@ -26,6 +26,8 @@ if (!process.env.MONGODB_URI) {
 interface IConfig {
   env: string;
   dev: boolean;
+  testing: boolean;
+  staging: boolean;
   prod: boolean;
 
   port: string;
@@ -34,14 +36,19 @@ interface IConfig {
   mongodbURI: string;
 
   sendgrid: {
+    enabled: boolean;
     user: string;
     password: string;
   };
 }
 
+const { SENDGRID_USER, SENDGRID_PASSWORD } = process.env;
+
 const config: IConfig = {
   env: ENV,
   dev: ENV === 'development',
+  testing: ENV === 'testing',
+  staging: ENV === 'staging',
   prod: ENV === 'production',
 
   port: String(process.env.PORT || 4000),
@@ -50,6 +57,8 @@ const config: IConfig = {
   mongodbURI: process.env.MONGODB_URI,
 
   sendgrid: {
+    enabled:
+      ENV !== 'testing' && SENDGRID_USER && SENDGRID_PASSWORD ? true : false,
     user: process.env.SENDGRID_USER,
     password: process.env.SENDGRID_PASSWORD,
   },

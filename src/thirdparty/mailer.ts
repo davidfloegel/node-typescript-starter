@@ -14,7 +14,7 @@ class Mailer {
   private isEnabled: boolean = false;
 
   constructor() {
-    this.isEnabled = true;
+    this.isEnabled = secrets.sendgrid.enabled;
   }
 
   public send() {
@@ -30,7 +30,7 @@ class Mailer {
       html: '<b>Hello world</b>',
     };
 
-    transporter.sendMail(email, (err, info) => {
+    transporter.sendMail(email, (err: any, info: any) => {
       if (err) {
         logger.error(err);
       } else {
