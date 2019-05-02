@@ -4,14 +4,14 @@ import faker from 'faker';
 import mongoose from 'mongoose';
 
 import { User } from '../../src/context/auth/interfaces';
-import { generateToken } from '../../src/context/auth/utils';
 import RecoveryTokenSchema from '../../src/context/auth/schema/recoveryToken';
 import UserSchema from '../../src/context/auth/schema/user';
 import VerificationTokenSchema from '../../src/context/auth/schema/verificationToken';
+import { generateToken } from '../../src/context/auth/utils';
 
 const { ObjectId } = mongoose.mongo;
 
-Given(/^I am logged in$/, async () => {
+Given(/^I am logged in$/, async function() {
   const newUser = new UserSchema({
     firstName: 'Demo',
     lastName: 'User',
@@ -29,13 +29,15 @@ Given(/^I am logged in$/, async () => {
   return false;
 });
 
-Given(/^I attach an authorization token to the request$/, () => {
+Given(/^I attach an authorization token to the request$/, function() {
   this.requestHeaders = {
     Authorization: this.token,
   };
 });
 
-Given(/^there (?:is|are) the following (?:user|users):$/, async table => {
+Given(/^there (?:is|are) the following (?:user|users):$/, async function(
+  table
+) {
   const users = table.hashes();
 
   try {
@@ -61,7 +63,7 @@ Given(/^there (?:is|are) the following (?:user|users):$/, async table => {
 
 Given(
   /^there (?:is|are) the following verification (?:token|tokens):$/,
-  async table => {
+  async function(table) {
     const tokens = table.hashes();
 
     try {
@@ -83,7 +85,7 @@ Given(
 
 Given(
   /^there (?:is|are) the following recovery (?:token|tokens):$/,
-  async table => {
+  async function(table) {
     const tokens = table.hashes();
 
     try {
