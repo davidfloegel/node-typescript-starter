@@ -92,3 +92,7 @@ export async function resetPassword(
     return next(e);
   }
 }
+
+export function privateRoute(_: any, res: Response) {
+  res.status(200).send(generateResponse({ message: 'Private Route' }));
+}

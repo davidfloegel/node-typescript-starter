@@ -5,7 +5,9 @@ import _ from 'lodash';
 
 When('I make a GET request to {string}', async url => {
   try {
-    this.res = await got.get(`http://localhost:4001${url}`);
+    const headers = this.requestHeaders || {};
+    console.log(headers)
+    this.res = await got.get(`http://localhost:4001${url}`, { headers });
     return true;
   } catch (e) {
     this.res = e;

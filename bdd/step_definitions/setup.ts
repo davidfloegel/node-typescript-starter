@@ -4,11 +4,36 @@ import faker from 'faker';
 import mongoose from 'mongoose';
 
 import { User } from '../../src/context/auth/interfaces';
+import { generateToken } from '../../src/context/auth/utils';
 import RecoveryTokenSchema from '../../src/context/auth/schema/recoveryToken';
 import UserSchema from '../../src/context/auth/schema/user';
 import VerificationTokenSchema from '../../src/context/auth/schema/verificationToken';
 
 const { ObjectId } = mongoose.mongo;
+
+Given(/^I am logged in$/, async () => {
+  const newUser = new UserSchema({
+    firstName: 'Demo',
+    lastName: 'User',
+    email: 'demo@user.com',
+    password: '12345',
+    flags: {
+      accountConfirmedAt: new Date(),
+    },
+  });
+
+  await newUser.save();
+
+  this.token = generateToken(newUser._id);
+
+  return false;
+});
+
+Given(/^I attach an authorization token to the request$/, () => {
+  this.requestHeaders = {
+    Authorization: this.token,
+  };
+});
 
 Given(/^there (?:is|are) the following (?:user|users):$/, async table => {
   const users = table.hashes();

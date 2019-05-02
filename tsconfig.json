@@ -19,7 +19,7 @@
       "thirdparty/*": ["src/thirdparty/*"],
       "utils/*": ["src/utils/*"]
     },
-    "typeRoots": [ "./src/typings", "./node_modules/@types"]
+    "typeRoots": [ "./src/typings", "node_modules/@types"]
   },
   "include": [
     "test/**/*",
