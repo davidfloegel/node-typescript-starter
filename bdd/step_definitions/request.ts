@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 When('I make a GET request to {string}', async url => {
   try {
-    this.res = await got.get(`http://localhost:4000${url}`);
+    this.res = await got.get(`http://localhost:4001${url}`);
     return true;
   } catch (e) {
     this.res = e;
@@ -16,7 +16,7 @@ When('I make a GET request to {string}', async url => {
 When('I make a POST request to {string} with payload:', async (url, table) => {
   try {
     const body = table && table.hashes ? table.hashes()[0] : {};
-    this.res = await got.post(`http://localhost:4000${url}`, {
+    this.res = await got.post(`http://localhost:4001${url}`, {
       json: true,
       body,
     });
@@ -29,7 +29,7 @@ When('I make a POST request to {string} with payload:', async (url, table) => {
 
 When('I make a POST request to {string}', async url => {
   try {
-    this.res = await got.post(`http://localhost:4000${url}`, {
+    this.res = await got.post(`http://localhost:4001${url}`, {
       json: true,
     });
     return true;
@@ -42,7 +42,7 @@ When('I make a POST request to {string}', async url => {
 When('I make a PUT request to {string} with payload:', async (url, table) => {
   try {
     const body = table && table.hashes ? table.hashes()[0] : {};
-    this.res = await got.put(`http://localhost:4000${url}`, {
+    this.res = await got.put(`http://localhost:4001${url}`, {
       json: true,
       body,
     });
@@ -55,7 +55,7 @@ When('I make a PUT request to {string} with payload:', async (url, table) => {
 
 When('I make a PUT request to {string}', async url => {
   try {
-    this.res = await got.put(`http://localhost:4000${url}`, {
+    this.res = await got.put(`http://localhost:4001${url}`, {
       json: true,
     });
     return true;
