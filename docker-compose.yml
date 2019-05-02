@@ -25,7 +25,7 @@ services:
     links:
       - mongodb
     environment:
-      - NODE_ENV=testing
+      - NODE_ENV=bdd
       - PORT=4001
   
   mongodb:
