@@ -15,8 +15,7 @@ dotenv.config({ path: '.env' });
 // Create express server
 const app = express();
 
-// // Connect to MongoDB if it's not unit testing
-// if (secrets.env !== 'unittest') {
+// Connect to MongoDb
 const mongoUrl = secrets.mongodbURI;
 mongoose.Promise = bluebird;
 mongoose
@@ -34,9 +33,6 @@ mongoose
     );
     process.exit(1);
   });
-// } else {
-//   app.emit('ready');
-// }
 
 // Configure express
 app.set('port', secrets.port);
@@ -44,7 +40,7 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routing
+// Routing @TODO extract
 app.get('/ping', (req: Request, res: Response) =>
   res.status(200).send({ data: 'pong' })
 );

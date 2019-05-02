@@ -26,7 +26,6 @@ if (!process.env.MONGODB_URI) {
 interface IConfig {
   env: string;
   dev: boolean;
-  bdd: boolean;
   test: boolean;
   staging: boolean;
   prod: boolean;
@@ -43,12 +42,11 @@ interface IConfig {
   };
 }
 
-const enable3rdParty = ENV !== 'bdd' && ENV !== 'test';
+const enable3rdParty = ENV !== 'test';
 
 const config: IConfig = {
   env: ENV,
   dev: ENV === 'development',
-  bdd: ENV === 'bdd',
   test: ENV === 'test',
   staging: ENV === 'staging',
   prod: ENV === 'production',
