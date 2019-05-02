@@ -10,7 +10,7 @@ const server = () => {
         switch (app.get('env')) {
           case 'development':
             return '🔧';
-          case 'testing':
+          case 'bdd':
             return '📝';
           case 'staging':
           case 'production':

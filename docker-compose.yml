@@ -1,18 +1,18 @@
 version: "3"
 services:
-  # tsapi:
-  #   build: .
-  #   volumes:
-  #     - ./:/app
-  #     - node_modules:/app/node_modules
-  #   command: yarn dev
-  #   ports:
-  #     - "4000:4000"
-  #   links:
-  #     - mongodb
-  #   environment:
-  #     - NODE_ENV=development
-  #     - PORT=4000
+  tsapi:
+    build: .
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    command: yarn dev
+    ports:
+      - "4000:4000"
+    links:
+      - mongodb
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
 
   tsapibdd:
     build: .
@@ -36,5 +36,5 @@ services:
       - ./mongo/data:/data/db
 
 volumes:
-  # node_modules:
+  node_modules:
   node_modules_bdd:

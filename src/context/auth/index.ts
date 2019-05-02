@@ -83,7 +83,14 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
 
     await verificationToken.save();
 
-    Mailer.send();
+    Mailer.send({
+      recipient: {
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+      },
+      subject: 'Welcome!',
+    });
 
     return persisted.toObject();
   } catch (e) {

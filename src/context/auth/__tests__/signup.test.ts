@@ -8,7 +8,7 @@ import db from 'test/db';
 import VerificationTokenModel from 'context/auth/schema/verificationToken';
 import Mailer from 'thirdparty/mailer';
 
-jest.spyOn(Mailer, 'send');
+Mailer.send = jest.fn();
 
 beforeAll(async () => db.setup([fakeUser({ email: 'existing@gmail.com' })]));
 
@@ -57,7 +57,7 @@ describe('Authentication: Signup', () => {
     expect(newUser).toHaveProperty('flags.accountConfirmedAt', null);
   });
 
-  it.only('it sends a welcome email when the account has been created', async () => {
+  it('it sends a welcome email when the account has been created', async () => {
     const newUser = await Auth.signup({
       email: 'anotheruser@gmail.com',
       password: 'hello123',
@@ -66,9 +66,12 @@ describe('Authentication: Signup', () => {
     });
 
     expect(Mailer.send).toHaveBeenCalledWith({
-      firstName: 'Aria',
-      lastName: 'Stark',
-      email: 'anotheruser@gmail.com',
+      recipient: {
+        firstName: 'Aria',
+        lastName: 'Stark',
+        email: 'anotheruser@gmail.com',
+      },
+      subject: 'Welcome!',
     });
   });
 

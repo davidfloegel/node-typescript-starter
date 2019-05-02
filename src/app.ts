@@ -15,32 +15,31 @@ dotenv.config({ path: '.env' });
 // Create express server
 const app = express();
 
-// Connect to MongoDB
-if (secrets.env !== 'testing') {
-  const mongoUrl = secrets.mongodbURI;
-  mongoose.Promise = bluebird;
-  mongoose
-    .connect(
-      mongoUrl,
-      { useCreateIndex: true, useNewUrlParser: true }
-    )
-    .then(() => {
-      logger.info('💾 Successfully connected to MongoDB');
-      app.emit('ready');
-    })
-    .catch((err: any) => {
-      logger.error(
-        '❗️MongoDB connection error. Please make sure MongoDB is running. ' +
-          err
-      );
-      process.exit(1);
-    });
-} else {
-  app.emit('ready');
-}
+// // Connect to MongoDB if it's not unit testing
+// if (secrets.env !== 'unittest') {
+const mongoUrl = secrets.mongodbURI;
+mongoose.Promise = bluebird;
+mongoose
+  .connect(
+    mongoUrl,
+    { useCreateIndex: true, useNewUrlParser: true }
+  )
+  .then(() => {
+    logger.info('💾 Successfully connected to MongoDB');
+    app.emit('ready');
+  })
+  .catch((err: any) => {
+    logger.error(
+      '❗️MongoDB connection error. Please make sure MongoDB is running. ' + err
+    );
+    process.exit(1);
+  });
+// } else {
+//   app.emit('ready');
+// }
 
 // Configure express
-app.set('port', secrets.port || 4000);
+app.set('port', secrets.port);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -26,7 +26,8 @@ if (!process.env.MONGODB_URI) {
 interface IConfig {
   env: string;
   dev: boolean;
-  testing: boolean;
+  bdd: boolean;
+  test: boolean;
   staging: boolean;
   prod: boolean;
 
@@ -42,12 +43,13 @@ interface IConfig {
   };
 }
 
-const { SENDGRID_USER, SENDGRID_PASSWORD } = process.env;
+const enable3rdParty = ENV !== 'bdd' && ENV !== 'test';
 
 const config: IConfig = {
   env: ENV,
   dev: ENV === 'development',
-  testing: ENV === 'testing',
+  bdd: ENV === 'bdd',
+  test: ENV === 'test',
   staging: ENV === 'staging',
   prod: ENV === 'production',
 
@@ -57,8 +59,7 @@ const config: IConfig = {
   mongodbURI: process.env.MONGODB_URI,
 
   sendgrid: {
-    enabled:
-      ENV !== 'testing' && SENDGRID_USER && SENDGRID_PASSWORD ? true : false,
+    enabled: enable3rdParty,
     user: process.env.SENDGRID_USER,
     password: process.env.SENDGRID_PASSWORD,
   },
