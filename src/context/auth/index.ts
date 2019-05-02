@@ -1,6 +1,5 @@
 import validate from 'validate.js';
 
-import { actions, fire } from 'src/lib/actions';
 import {
   BadRequestError,
   CrendentialsInvalidError,
@@ -10,6 +9,7 @@ import {
   UnauthorizedError,
   ValidationError,
 } from 'src/lib/errors';
+import Mailer from 'thirdparty/mailer';
 import { generateRandomHash } from 'utils/string';
 
 import { User } from './interfaces';
@@ -83,11 +83,7 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
 
     await verificationToken.save();
 
-    fire(actions.SIGNUP, {
-      firstName: persisted.firstName,
-      email: persisted.email,
-      verificationToken: token,
-    });
+    Mailer.send();
 
     return persisted.toObject();
   } catch (e) {
