@@ -31,12 +31,14 @@ interface IConfig {
   prod: boolean;
 
   port: string;
+  appUrl: string;
 
   sessionSecret: string;
   mongodbURI: string;
 
   sendgrid: {
     enabled: boolean;
+    catchAll?: string;
     user: string;
     password: string;
   };
@@ -52,12 +54,14 @@ const config: IConfig = {
   prod: ENV === 'production',
 
   port: String(process.env.PORT || 4000),
+  appUrl: process.env.APP_URL,
 
   sessionSecret: process.env.SESSION_SECRET,
   mongodbURI: process.env.MONGODB_URI,
 
   sendgrid: {
     enabled: enable3rdParty,
+    catchAll: process.env.SENDGRID_CATCH_ALL,
     user: process.env.SENDGRID_USER,
     password: process.env.SENDGRID_PASSWORD,
   },

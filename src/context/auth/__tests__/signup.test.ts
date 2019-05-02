@@ -72,6 +72,7 @@ describe('Authentication: Signup', () => {
         email: 'anotheruser@gmail.com',
       },
       subject: 'Welcome!',
+      html: expect.anything(), // @TODO not enough!
     });
   });
 

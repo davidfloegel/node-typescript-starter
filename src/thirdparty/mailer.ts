@@ -17,6 +17,7 @@ interface IEmailData {
     email: string;
   };
   subject: string;
+  html: string;
 }
 
 class Mailer {
@@ -32,19 +33,21 @@ class Mailer {
       return null;
     }
 
+    const toEmail =
+      (secrets.dev && secrets.sendgrid.catchAll) || data.recipient.email;
+
     const email = {
       from: 'hello@gomuso.io',
-      to: data.recipient.email,
+      to: toEmail,
       subject: data.subject,
-      text: 'Hello world',
-      html: '<b>Hello world</b>',
+      html: data.html,
     };
 
     return transporter.sendMail(email, (err: any, info: any) => {
       if (err) {
-        logger.error(err);
+        logger.error(`Couldn't send email: ${err}`);
       } else {
-        logger.info(info.response);
+        logger.info(`Email sent: ${info.response}`);
       }
     });
   }

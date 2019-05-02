@@ -2,9 +2,12 @@ import Auth from 'context/auth';
 import { fakeUser, fakeVerificationToken } from 'context/auth/__tests__/fake';
 import { BadRequestError } from 'src/lib/errors';
 import db from 'test/db';
+import Mailer from 'thirdparty/mailer';
 
 import UserModel from '../schema/user';
 import TokenModel from '../schema/verificationToken';
+
+Mailer.send = jest.fn();
 
 const user1 = fakeUser();
 const user2 = fakeUser({ notConfirmed: true });
@@ -55,5 +58,15 @@ describe('Authentication: Confirm Account', () => {
 
     const token = await TokenModel.findOne({ token: 'verifyme' });
     expect(token).toBeNull();
+
+    expect(Mailer.send).toHaveBeenCalledWith({
+      recipient: {
+        firstName: user2.firstName,
+        lastName: user2.lastName,
+        email: user2.email,
+      },
+      subject: 'Account confirmed!',
+      html: expect.anything(), // @TODO not enough!
+    });
   });
 });

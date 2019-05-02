@@ -16,6 +16,7 @@ import { User } from './interfaces';
 import RecoveryTokenModel from './schema/recoveryToken';
 import UserModel from './schema/user';
 import VerificationTokenModel from './schema/verificationToken';
+import * as mails from './mails';
 
 import { generateToken, hashPassword } from './utils';
 
@@ -90,6 +91,7 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
         email: newUser.email,
       },
       subject: 'Welcome!',
+      html: mails.signupEmail(newUser.firstName, token),
     });
 
     return persisted.toObject();
@@ -132,7 +134,15 @@ const confirmAccount = async (token: string): Promise<boolean> => {
     if (updatedUser.ok === 1) {
       await VerificationTokenModel.deleteOne({ token });
 
-      // TODO send verification email
+      Mailer.send({
+        recipient: {
+          firstName: findUser.firstName,
+          lastName: findUser.lastName,
+          email: findUser.email,
+        },
+        subject: 'Account confirmed!',
+        html: mails.accountVerified(findUser.firstName),
+      });
 
       return true;
     }
@@ -209,15 +219,25 @@ const recoverAccount = async (
   }
 
   try {
+    const randomHash = generateRandomHash(32);
+
     const token = new RecoveryTokenModel({
       userId: user._id,
-      token: generateRandomHash(32),
+      token: randomHash,
       createdAt: new Date(),
     });
 
     const savedToken = await token.save();
 
-    // @TODO send email
+    Mailer.send({
+      recipient: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
+      subject: 'Your password reset link',
+      html: mails.resetPassword(user.firstName, randomHash),
+    });
 
     return true;
   } catch (e) {
@@ -266,7 +286,15 @@ const resetPassword = async (
     if (updatedUser.ok === 1) {
       await RecoveryTokenModel.deleteOne({ token: formData.token });
 
-      // TODO send confirmation email
+      Mailer.send({
+        recipient: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+        subject: 'Account password has been reset',
+        html: mails.passwordResetComplete(user.firstName),
+      });
 
       return true;
     }

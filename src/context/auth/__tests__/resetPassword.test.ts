@@ -4,10 +4,13 @@ import Auth from 'context/auth';
 import { fakeRecoveryToken, fakeUser } from 'context/auth/__tests__/fake';
 import { BadRequestError, ValidationError } from 'src/lib/errors';
 import db from 'test/db';
+import Mailer from 'thirdparty/mailer';
 
 import TokenModel from '../schema/recoveryToken';
 import UserModel from '../schema/user';
 import { hashPassword } from '../utils';
+
+Mailer.send = jest.fn();
 
 const user1 = fakeUser();
 const user2 = fakeUser();
@@ -99,5 +102,16 @@ describe('Authentication: Reset Password', () => {
     // check token has been deleted
     const token = await TokenModel.findOne({ userId: user2._id });
     expect(token).toBeNull();
+
+    // check email has been sent
+    expect(Mailer.send).toHaveBeenCalledWith({
+      recipient: {
+        firstName: user2.firstName,
+        lastName: user2.lastName,
+        email: user2.email,
+      },
+      subject: 'Account password has been reset',
+      html: expect.anything(), // @TODO not enough!
+    });
   });
 });

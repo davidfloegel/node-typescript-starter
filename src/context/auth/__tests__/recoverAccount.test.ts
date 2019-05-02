@@ -2,9 +2,12 @@ import Auth from 'context/auth';
 import { fakeRecoveryToken, fakeUser } from 'context/auth/__tests__/fake';
 import { BadRequestError, ValidationError } from 'src/lib/errors';
 import db from 'test/db';
+import Mailer from 'thirdparty/mailer';
 
 import TokenModel from '../schema/recoveryToken';
 import UserModel from '../schema/user';
+
+Mailer.send = jest.fn();
 
 const user1 = fakeUser();
 const user2 = fakeUser();
@@ -58,5 +61,15 @@ describe('Authentication: Recover Account', () => {
     expect(newToken).toBeDefined();
     expect(newToken).toHaveProperty('token');
     expect(newToken).not.toEqual('iamatoken');
+
+    expect(Mailer.send).toHaveBeenCalledWith({
+      recipient: {
+        firstName: user2.firstName,
+        lastName: user2.lastName,
+        email: user2.email,
+      },
+      subject: 'Your password reset link',
+      html: expect.anything(), // @TODO not enough!
+    });
   });
 });
