@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 
-import * as AuthController from 'controllers/AuthController';
 import logger from 'utils/logger';
 import secrets from 'utils/secrets';
+import router from './router';
 
 // Load environment variables from .env file
 dotenv.config({ path: '.env' });
@@ -40,14 +40,6 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routing @TODO extract
-app.get('/ping', (req: Request, res: Response) =>
-  res.status(200).send({ data: 'pong' })
-);
-app.post('/signup', AuthController.signup);
-app.post('/signin', AuthController.signin);
-app.post('/recover-account', AuthController.recoverAccount);
-app.post('/reset-password', AuthController.resetPassword);
-app.put('/confirm-account', AuthController.confirmAccount);
+app.use('/', router());
 
 export default app;
