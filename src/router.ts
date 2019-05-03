@@ -1,5 +1,6 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import passport from 'passport';
+
 import 'thirdparty/passport';
 
 import * as AuthController from 'controllers/AuthController';

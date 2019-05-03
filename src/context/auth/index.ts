@@ -13,10 +13,10 @@ import Mailer from 'thirdparty/mailer';
 import { generateRandomHash } from 'utils/string';
 
 import { User } from './interfaces';
+import * as mails from './mails';
 import RecoveryTokenModel from './schema/recoveryToken';
 import UserModel from './schema/user';
 import VerificationTokenModel from './schema/verificationToken';
-import * as mails from './mails';
 
 import { generateToken, hashPassword } from './utils';
 

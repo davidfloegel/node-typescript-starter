@@ -1,5 +1,5 @@
 import app from 'src/app';
-import errorHandler from 'src/middlewares/errorHandler';
+import errorHandler from 'src/middlewares/errorhandler';
 
 app.use(errorHandler);
 

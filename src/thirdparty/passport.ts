@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import secrets from 'utils/secrets';
 
 import User from 'context/auth/schema/user';
