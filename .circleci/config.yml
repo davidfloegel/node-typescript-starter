@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/node:10
+      - image: circleci/mongo:3.6.4
       
     working_directory: ~/repo
 
@@ -25,8 +25,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
        
       - run: cp .env.example .env
-      - run: docker-compose up
 
       # run tests!
-      - run: docker-compose exec tsapi yarn tslint
+      - run: yarn tslint
 
