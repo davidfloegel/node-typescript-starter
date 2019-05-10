@@ -1,4 +1,3 @@
-import validate from 'validate.js';
 import * as yup from 'yup';
 
 import {
