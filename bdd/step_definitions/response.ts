@@ -22,7 +22,6 @@ Then(
     expect(this.res.body.data).to.have.property(field);
 
     table.hashes().forEach((row: any) => {
-      // _.set(expectedObj, row.key, row.value);
       expect(_.get(this.res.body.data[field], row.key)).to.eql(row.value);
     });
   }

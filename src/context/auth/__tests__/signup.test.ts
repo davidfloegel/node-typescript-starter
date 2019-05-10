@@ -2,7 +2,10 @@ import bcrypt from 'bcrypt-nodejs';
 
 import Auth from 'context/auth';
 import { fakeUser } from 'context/auth/__tests__/fake';
-import { EmailExistsError, ValidationError } from 'src/lib/errors';
+import {
+  EmailExistsError,
+  YupValidationError,
+} from 'src/lib/errors';
 import db from 'test/db';
 
 import VerificationTokenModel from 'context/auth/schema/verificationToken';
@@ -15,7 +18,7 @@ beforeAll(async () => db.setup([fakeUser({ email: 'existing@gmail.com' })]));
 afterAll(async () => db.teardown());
 
 describe('Authentication: Signup', () => {
-  it('it throws an error if the form data is invalid', async () => {
+  test('it throws an error if the form data is invalid', async () => {
     await expect(
       Auth.signup({
         email: '',
@@ -23,10 +26,10 @@ describe('Authentication: Signup', () => {
         firstName: '',
         lastName: '',
       })
-    ).rejects.toThrowError(ValidationError);
+    ).rejects.toThrowError(YupValidationError);
   });
 
-  it('it throws an error if the email address is already registered', async () => {
+  test('it throws an error if the email address is already registered', async () => {
     await expect(
       Auth.signup({
         email: 'existing@gmail.com',
@@ -37,7 +40,7 @@ describe('Authentication: Signup', () => {
     ).rejects.toThrowError(EmailExistsError);
   });
 
-  it('it creates a new and unconfirmed user', async () => {
+  test('it creates a new and unconfirmed user', async () => {
     const newUser = await Auth.signup({
       email: 'newuser@gmail.com',
       password: 'hello123',
@@ -57,7 +60,7 @@ describe('Authentication: Signup', () => {
     expect(newUser).toHaveProperty('flags.accountConfirmedAt', null);
   });
 
-  it('it sends a welcome email when the account has been created', async () => {
+  test('it sends a welcome email when the account has been created', async () => {
     const newUser = await Auth.signup({
       email: 'anotheruser@gmail.com',
       password: 'hello123',
@@ -76,7 +79,7 @@ describe('Authentication: Signup', () => {
     });
   });
 
-  it('it hashes the password', async () => {
+  test('it hashes the password', async () => {
     const salt = bcrypt.genSaltSync(10);
     bcrypt.genSaltSync = jest.fn().mockImplementation(() => salt);
 
@@ -90,7 +93,7 @@ describe('Authentication: Signup', () => {
     expect(newUser).toHaveProperty('password', bcrypt.hashSync('hashme', salt));
   });
 
-  it('it converts the email address to lowercase', async () => {
+  test('it converts the email address to lowercase', async () => {
     const newUser = await Auth.signup({
       email: 'IAmMixedCase@gmail.com',
       password: 'hello123',
@@ -101,7 +104,7 @@ describe('Authentication: Signup', () => {
     expect(newUser).toHaveProperty('email', 'iammixedcase@gmail.com');
   });
 
-  it('it generates and saves a new email verification token', async () => {
+  test('it generates and saves a new email verification token', async () => {
     const newUser = await Auth.signup({
       email: 'successful@gmail.com',
       password: 'hello123',

@@ -1,6 +1,6 @@
 import Auth from 'context/auth';
 import { fakeRecoveryToken, fakeUser } from 'context/auth/__tests__/fake';
-import { BadRequestError, ValidationError } from 'src/lib/errors';
+import { BadRequestError, YupValidationError } from 'src/lib/errors';
 import db from 'test/db';
 import Mailer from 'thirdparty/mailer';
 
@@ -28,7 +28,7 @@ describe('Authentication: Recover Account', () => {
   it('it throws an error if the email address is invalid', async () => {
     await expect(
       Auth.recoverAccount({ email: 'invalidemail' })
-    ).rejects.toThrowError(ValidationError);
+    ).rejects.toThrowError(YupValidationError);
   });
 
   it('it throws an error if the email address is not registered', async () => {

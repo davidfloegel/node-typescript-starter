@@ -1,6 +1,7 @@
 import bluebird from 'bluebird';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
@@ -36,6 +37,7 @@ mongoose
 
 // Configure express
 app.set('port', secrets.port);
+app.use(cors());
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

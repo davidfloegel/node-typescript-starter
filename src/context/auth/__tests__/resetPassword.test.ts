@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt-nodejs';
 
 import Auth from 'context/auth';
 import { fakeRecoveryToken, fakeUser } from 'context/auth/__tests__/fake';
-import { BadRequestError, ValidationError } from 'src/lib/errors';
+import { BadRequestError, YupValidationError } from 'src/lib/errors';
 import db from 'test/db';
 import Mailer from 'thirdparty/mailer';
 
@@ -58,7 +58,7 @@ describe('Authentication: Reset Password', () => {
         newPassword: 'a',
         confirmPassword: 'b',
       })
-    ).rejects.toThrowError(ValidationError);
+    ).rejects.toThrowError(YupValidationError);
   });
 
   it('it throws an error if the password confirmation is invalid', async () => {
@@ -68,7 +68,7 @@ describe('Authentication: Reset Password', () => {
         newPassword: 'newPW',
         confirmPassword: null,
       })
-    ).rejects.toThrowError(ValidationError);
+    ).rejects.toThrowError(YupValidationError);
   });
 
   it("it throws an error if the new password and confirmation don't match", async () => {

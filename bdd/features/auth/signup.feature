@@ -10,38 +10,48 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key         | value                     |
-      | firstName.0 | First name can't be blank |
+      | key       | value                          |
+      | firstName | First Name is a required field |
 
-  Scenario: I should receive an error if the first name is too short
+  Scenario Outline: I should receive an error if the first name is invalid
     When I make a POST request to "/signup" with payload:
       | firstName | lastName  | email          | password  |
-      | E         | Targaryen | dany@gmail.com | password1 |
+      | <value>   | Targaryen | dany@gmail.com | password1 |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key         | value                                            |
-      | firstName.0 | First name is too short (minimum is 2 characters) |
+      | key       | value      |
+      | firstName | <errorMsg> |
+
+    Examples:
+      | value             | errorMsg                                 |
+      | a                 | First Name must be at least 2 characters |
+      | I am way too long | First Name must be at most 15 characters |
 
   Scenario: I should receive an error if the last name is missing
     When I make a POST request to "/signup" with payload:
       | firstName | email          | password  |
-      | Aria      | aria@gmail.com | password1 |
+      | Danny     | dany@gmail.com | password1 |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key        | value                    |
-      | lastName.0 | Last name can't be blank |
+      | key      | value                          |
+      | lastName | Last Name is a required field |
 
-  Scenario: I should receive an error if the last name is too short
+  Scenario Outline: I should receive an error if the last name is invalid
     When I make a POST request to "/signup" with payload:
-      | firstName | lastName  | email          | password  |
-      | Egor      | T         | egor@gmail.com | password1 |
+      | firstName | lastName | email          | password  |
+      | Dany      | <value>  | dany@gmail.com | password1 |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key        | value                                        |
-      | lastName.0 | Last name is too short (minimum is 2 characters) |
+      | key      | value      |
+      | lastName | <errorMsg> |
+
+    Examples:
+      | value             | errorMsg                                |
+      | a                 | Last Name must be at least 2 characters |
+      | I am way too long | Last Name must be at most 15 characters |
 
   Scenario: I should receive an error if the email address is missing
     When I make a POST request to "/signup" with payload:
@@ -50,8 +60,8 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value               |
-      | email.0 | Email can't be blank |
+      | key   | value                     |
+      | email | Email is a required field |
 
   Scenario: I should receive an error if the email address is invalid
     When I make a POST request to "/signup" with payload:
@@ -60,28 +70,32 @@ Feature: Create Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value                     |
-      | email.0 | Email is not a valid email |
+      | key   | value                       |
+      | email | Email must be a valid email |
 
   Scenario: I should receive an error if the password is missing
     When I make a POST request to "/signup" with payload:
-      | firstName | lastName | email          |
-      | Aria      | stark    | aria@gmail.com |
+      | firstName | lastName  | email          |
+      | Danny     | Stormborn | dany@gmail.com |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key        | value                  |
-      | password.0 | Password can't be blank |
+      | key      | value                        |
+      | password | Password is a required field |
 
-  Scenario: I should receive an error if the password is too short
+  Scenario Outline: I should receive an error if the password is invalid
     When I make a POST request to "/signup" with payload:
       | firstName | lastName  | email          | password |
-      | Egor      | Targaryen | egor@gmail.com | p        |
+      | Dany      | Stormborn | dany@gmail.com | <value>  |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key        | value                                          |
-      | password.0 | Password is too short (minimum is 4 characters) |
+      | key      | value      |
+      | password | <errorMsg> |
+
+    Examples:
+      | value | errorMsg                               |
+      | abc   | Password must be at least 4 characters |
 
   Scenario: I should receive an error if my email address is already registered
     Given there is the following user:
@@ -104,4 +118,3 @@ Feature: Create Account
       | firstName | Aria           |
       | lastName  | Stark          |
       | email     | aria@gmail.com |
-

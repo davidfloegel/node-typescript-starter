@@ -1,4 +1,5 @@
 import validate from 'validate.js';
+import * as yup from 'yup';
 
 import {
   BadRequestError,
@@ -8,6 +9,7 @@ import {
   InternalError,
   UnauthorizedError,
   ValidationError,
+  YupValidationError,
 } from 'src/lib/errors';
 import Mailer from 'thirdparty/mailer';
 import { generateRandomHash } from 'utils/string';
@@ -53,25 +55,39 @@ export interface IResetPasswordFormData {
 }
 
 const signup = async (formData: ISignupFormData): Promise<User> => {
-  const validationFailed = validate(formData, {
-    email: { presence: true, email: true },
-    password: { presence: true, length: { minimum: 4 } },
-    firstName: { presence: true, length: { minimum: 2 } },
-    lastName: { presence: true, length: { minimum: 2 } },
-  });
-
-  if (validationFailed) {
-    throw new ValidationError(validationFailed);
-  }
-
-  const newUser = new UserModel({
-    email: formData.email,
-    password: formData.password,
-    firstName: formData.firstName,
-    lastName: formData.lastName,
+  const validationSchema = yup.object().shape({
+    firstName: yup
+      .string()
+      .required()
+      .min(2)
+      .max(15),
+    lastName: yup
+      .string()
+      .required()
+      .min(2)
+      .max(15),
+    email: yup
+      .string()
+      .required()
+      .email(),
+    password: yup
+      .string()
+      .required()
+      .min(4),
   });
 
   try {
+    const e: any = await validationSchema.validate(formData, {
+      abortEarly: false,
+    });
+
+    const newUser = new UserModel({
+      email: formData.email,
+      password: formData.password,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+    });
+
     const persisted = await newUser.save();
 
     const token = generateRandomHash();
@@ -96,6 +112,10 @@ const signup = async (formData: ISignupFormData): Promise<User> => {
 
     return persisted.toObject();
   } catch (e) {
+    if (e instanceof yup.ValidationError) {
+      throw new YupValidationError(e);
+    }
+
     if (e.code === DUPLICATE_ERROR_CODE) {
       throw new EmailExistsError();
     }
@@ -153,13 +173,21 @@ const confirmAccount = async (token: string): Promise<boolean> => {
 };
 
 const login = async (formData: ISigninFormData): Promise<IAuthObject> => {
-  const validationFailed = validate(formData, {
-    email: { presence: true, email: true },
-    password: { presence: true },
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .required()
+      .email(),
+    password: yup
+      .string()
+      .required()
+      .min(4),
   });
 
-  if (validationFailed) {
-    throw new ValidationError(validationFailed);
+  try {
+    await validationSchema.validate(formData, { abortEarly: false });
+  } catch (e) {
+    throw new YupValidationError(e);
   }
 
   const user = await UserModel.findOne(
@@ -199,12 +227,17 @@ const login = async (formData: ISigninFormData): Promise<IAuthObject> => {
 const recoverAccount = async (
   formData: IRecoverAccountFormData
 ): Promise<boolean> => {
-  const validationFailed = validate(formData, {
-    email: { presence: true, email: true },
+  const validationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .required()
+      .email(),
   });
 
-  if (validationFailed) {
-    throw new ValidationError(validationFailed);
+  try {
+    await validationSchema.validate(formData, { abortEarly: false });
+  } catch (e) {
+    throw new YupValidationError(e);
   }
 
   const user = await UserModel.findOne({ email: formData.email });
@@ -260,13 +293,21 @@ const resetPassword = async (
     throw new BadRequestError('Recovery token is invalid or expired');
   }
 
-  const validationFailed = validate(formData, {
-    newPassword: { presence: true, length: { minimum: 4 } },
-    confirmPassword: { presence: true },
+  const validationSchema = yup.object().shape({
+    newPassword: yup
+      .string()
+      .required()
+      .min(4),
+    confirmPassword: yup
+      .string()
+      .required()
+      .min(4),
   });
 
-  if (validationFailed) {
-    throw new ValidationError(validationFailed);
+  try {
+    await validationSchema.validate(formData, { abortEarly: false });
+  } catch (e) {
+    throw new YupValidationError(e);
   }
 
   if (formData.newPassword !== formData.confirmPassword) {

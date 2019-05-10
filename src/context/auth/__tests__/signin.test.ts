@@ -6,7 +6,7 @@ import {
   CrendentialsInvalidError,
   EmailExistsError,
   UnauthorizedError,
-  ValidationError,
+  YupValidationError,
 } from 'src/lib/errors';
 import db from 'test/db';
 
@@ -33,7 +33,7 @@ describe('Authentication: Sign In', () => {
         email: '',
         password: '',
       })
-    ).rejects.toThrowError(ValidationError);
+    ).rejects.toThrowError(YupValidationError);
   });
 
   it('it throws an error if the email address is not registered', async () => {

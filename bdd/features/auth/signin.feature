@@ -10,18 +10,18 @@ Feature: Sign In to Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value                |
-      | email.0 | Email can't be blank |
+      | key   | value                     |
+      | email | Email is a required field |
 
   Scenario: I should receive an error if the email address is invalid
-    When I make a POST request to "/signin" with payload:
+    When I make a POST request to "/signup" with payload:
       | email   | password  |
       | invalid | password1 |
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value                      |
-      | email.0 | Email is not a valid email |
+      | key   | value                       |
+      | email | Email must be a valid email |
 
   Scenario: I should receive an error if the password is missing
     When I make a POST request to "/signin" with payload:
@@ -30,8 +30,8 @@ Feature: Sign In to Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key        | value                  |
-      | password.0 | Password can't be blank |
+      | key      | value                        |
+      | password | Password is a required field |
 
   Scenario: I should receive an error if the email address is not registered
     Given there is the following user:

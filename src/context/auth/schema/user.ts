@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema(
     email: { required: true, type: String, unique: true, lowercase: true },
     password: { required: true, type: String, select: false },
 
-    firstName: { required: true, type: String },
-    lastName: { required: true, type: String },
+    firstName: { required: true, type: String, maxlength: 15 },
+    lastName: { required: true, type: String, maxlength: 15 },
 
     flags: {
       accountConfirmedAt: { type: Date, default: null },

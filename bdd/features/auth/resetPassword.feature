@@ -38,8 +38,8 @@ Feature: Reset Password
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key           | value                       |
-      | newPassword.0 | New password can't be blank |
+      | key         | value                            |
+      | newPassword | New Password is a required field |
 
   Scenario: I should receive an error if the new password is too short
     Given there is the following user:
@@ -54,8 +54,8 @@ Feature: Reset Password
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key           | value                                               |
-      | newPassword.0 | New password is too short (minimum is 4 characters) |
+      | key         | value                                      |
+      | newPassword | New Password must be at least 4 characters |
 
   Scenario: I should receive an error if the password confirmation is missing
     Given there is the following user:
@@ -70,8 +70,8 @@ Feature: Reset Password
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key               | value                           |
-      | confirmPassword.0 | Confirm password can't be blank |
+      | key             | value                                |
+      | confirmPassword | Confirm Password is a required field |
 
   Scenario: I should receive an error if the new password and confirmation don't match
     Given there is the following user:

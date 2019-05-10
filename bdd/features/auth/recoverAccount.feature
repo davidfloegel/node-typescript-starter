@@ -8,8 +8,8 @@ Feature: Recover Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value                |
-      | email.0 | Email can't be blank |
+      | key   | value                     |
+      | email | Email is a required field |
 
   Scenario: I should receive an error if the email address is invalid
     When I make a POST request to "/recover-account" with payload:
@@ -18,8 +18,8 @@ Feature: Recover Account
     Then the response status code should be 400
     And the response error should be "Form validation failed"
     And the response should contain a "errors" property with the attributes:
-      | key     | value                      |
-      | email.0 | Email is not a valid email |
+      | key   | value                       |
+      | email | Email must be a valid email |
 
   Scenario: I should receive an error if the email address doesn't exist
     When I make a POST request to "/recover-account" with payload:
