@@ -2,12 +2,14 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import logger from './logger';
 
-if (!fs.existsSync('.env')) {
-  logger.error('No .env file exists in the root directory of your project');
-  process.exit(1);
-}
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+  if (!fs.existsSync('.env')) {
+    logger.error('No .env file exists in the root directory of your project');
+    process.exit(1);
+  }
 
-dotenv.config({ path: '.env' });
+  dotenv.config({ path: '.env' });
+}
 
 const ENV = process.env.NODE_ENV;
 
