@@ -3,8 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:10
-      - image: circleci/mongo:3.6.4
-        name: mongo
+      - image: mongo:3.6.4
       
     working_directory: ~/repo
 
